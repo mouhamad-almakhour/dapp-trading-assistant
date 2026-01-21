@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Schibsted_Grotesk, Martian_Mono } from "next/font/google";
 import "./globals.css";
-import LiquidEther from "@/components/LiquidEther";
+
 import Beams from "@/components/Beams";
 
 const schibstedGrotesk = Schibsted_Grotesk({
@@ -41,6 +41,7 @@ export default function RootLayout({
             rotation={0}
           />
         </div>
+
         <main>{children}</main>
       </body>
     </html>

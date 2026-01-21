@@ -1,26 +1,196 @@
 @import "tailwindcss";
 
+/* =====================
+   Tokens
+===================== */
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0a0a0a;
+
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+
+  --primary: #2563eb;
+  --primary-foreground: #f8fafc;
+
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
+
+  --radius: 0.5rem;
+
+  --green: #22c55e;
+  --red: #ef4444;
+
+  --sidebar: #0f172a;
+  --sidebar-foreground: #f8fafc;
 }
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  --card: #141414;
+  --card-foreground: #ededed;
+
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #3b82f6;
+
+  --sidebar: #0c0c0c;
+}
+
+/* =====================
+   Theme bridge
+===================== */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --radius: var(--radius);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* =====================
+   Base
+===================== */
+
+* {
+  border-color: var(--border);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+}
+
+/* =====================
+   Components (safe only)
+===================== */
+
+@layer components {
+  /* Cards */
+  .trading-card {
+    @apply bg-card border rounded-lg shadow-sm transition-shadow;
+  }
+
+  .trading-card:hover {
+    @apply shadow-md;
+  }
+
+  .trading-card-dark {
+    @apply bg-card border rounded-lg shadow-lg backdrop-blur-sm;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .stats-card {
+    @apply bg-card border rounded-lg shadow-sm;
+    @apply p-4 flex flex-col space-y-2;
+  }
+
+  .stats-card:hover {
+    @apply shadow-md;
+  }
+
+  /* Prices */
+  .price-positive {
+    color: var(--green);
+    @apply font-semibold;
+  }
+
+  .price-negative {
+    color: var(--red);
+    @apply font-semibold;
+  }
+
+  .price-neutral {
+    @apply text-muted-foreground font-semibold;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    @apply px-4 py-2 rounded-md font-medium transition-opacity;
+  }
+
+  .btn-primary:hover {
+    @apply opacity-90;
+  }
+
+  .btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--ring);
+  }
+
+  .btn-success {
+    background: var(--green);
+    @apply text-white px-4 py-2 rounded-md font-medium;
+  }
+
+  .btn-danger {
+    background: var(--red);
+    @apply text-white px-4 py-2 rounded-md font-medium;
+  }
+
+  /* Input */
+  .input-trading {
+    @apply h-10 w-full rounded-md px-3 py-2 text-sm;
+    background: var(--background);
+    color: var(--foreground);
+    border: 1px solid var(--input);
+  }
+
+  .input-trading::placeholder {
+    color: var(--muted-foreground);
+  }
+
+  .input-trading:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--ring);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--sidebar);
+    color: var(--sidebar-foreground);
+    @apply h-screen w-64 border-r;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 text-sm font-medium;
+    @apply transition-colors rounded-md mx-2;
+    color: rgba(248, 250, 252, 0.7);
+  }
+
+  .sidebar-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--sidebar-foreground);
+  }
+
+  .sidebar-link.active {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--sidebar-foreground);
+  }
+
+  /* Modal */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-50;
+  }
+
+  .modal-content {
+    @apply bg-card border rounded-lg shadow-lg;
+    @apply p-6 max-w-lg w-full mx-auto mt-20;
+  }
 }
