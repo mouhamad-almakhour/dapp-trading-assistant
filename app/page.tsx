@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import React from "react";
 
 const Home = () => {
@@ -10,6 +11,9 @@ const Home = () => {
       <p className="text-center text-white mt-5">
         Real-time gas prices, token swaps, and market insights All in one palce!
       </p>
+      <Button className="flex flex-col items-center justify-center mt-10">
+        Explore it Now!
+      </Button>
     </section>
   );
 };
