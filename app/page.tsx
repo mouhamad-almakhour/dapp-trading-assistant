@@ -9,7 +9,8 @@ const Home = () => {
         for your crypto needs
       </h1>
       <p className="text-center mt-5">
-        Real-time gas prices, token swaps, and market insights All in one palce!
+        Real-time gas prices, token swaps, and market insights. All in one
+        place!
       </p>
       <ExploreBtn />
 

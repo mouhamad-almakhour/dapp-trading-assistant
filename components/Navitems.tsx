@@ -10,7 +10,7 @@ const NavItems = () => {
   const isActive = (path: string) => {
     if (path === "/") return pathname === "/";
 
-    return pathname.startsWith(path);
+    return pathname === path || pathname.startsWith(`${path}/`);
   };
 
   const NavItem = ({
@@ -50,16 +50,12 @@ const NavItems = () => {
       {isActive("/") ? (
         <li key="mode-toggle">
           <div className="flex flex-col lg:flex-row gap-2 items-center justify-center">
-            <Link href={"/sign-in"}>
-              <Button variant="ghost" size="lg" className="btn-auth ">
-                Login
-              </Button>
-            </Link>
-            <Link href={"/sign-up"}>
-              <Button variant="ghost" size="lg" className="btn-auth ">
-                Sign Up
-              </Button>
-            </Link>
+            <Button asChild variant="ghost" size="lg" className="btn-auth">
+              <Link href="/sign-in">Login</Link>
+            </Button>
+            <Button asChild variant="ghost" size="lg" className="btn-auth">
+              <Link href="/sign-up">Sign Up</Link>
+            </Button>
             <ModeToggle />
           </div>
         </li>

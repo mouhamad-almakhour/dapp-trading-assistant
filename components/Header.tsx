@@ -8,7 +8,7 @@ const Header = () => {
       <div className="container header-wrapper">
         <Link href="/">
           <Image
-            src="icons/logo.svg"
+            src="/icons/logo.svg"
             alt="Dapp logo"
             width={140}
             height={32}
