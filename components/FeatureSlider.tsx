@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { FEATURES } from "@/lib/constants";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import Image from "next/image";
 
 const FeatureSlider = () => {
@@ -21,14 +20,6 @@ const FeatureSlider = () => {
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
-  };
-
-  const previousSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + FEATURES.length) % FEATURES.length);
-  };
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % FEATURES.length);
   };
 
   return (

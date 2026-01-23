@@ -25,3 +25,10 @@ export const FEATURES: Feature[] = [
     image: "/images/ai-summaries.png",
   },
 ];
+
+export const NAV_ITEMS = [
+  { href: "/", label: "Home" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/search", label: "Search" },
+  { href: "/setting", label: "Setting" },
+];

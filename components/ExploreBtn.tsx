@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 const ExploreBtn = () => {
   return (
     <Button variant="ghost" size="lg" className="btn-explore">
-      <a href="/sign-in">Explore Now</a>
+      <a href="/dashboard">Explore Now</a>
       <ArrowDown size={20} />
     </Button>
   );

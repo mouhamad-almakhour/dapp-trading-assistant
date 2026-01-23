@@ -1,17 +1,16 @@
 @import "tailwindcss";
-
 /* =====================
    Professional Trading App Theme
 ===================== */
 
 :root {
-  /* Dark Background Colors */
-  --background: #0a0e27;
-  --foreground: #ffffff;
+  /* Light Background Colors */
+  --background: #f8fafc;
+  --foreground: #0a0e27;
 
   /* Card Colors */
-  --card: #141d35;
-  --card-foreground: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #0a0e27;
 
   /* Primary Colors - Professional Blue */
   --primary: #3b82f6;
@@ -22,16 +21,16 @@
   --secondary-foreground: #ffffff;
 
   /* Muted Colors */
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
+  --muted: #e2e8f0;
+  --muted-foreground: #475569;
 
   /* Neutral Colors */
   --accent: #0ea5e9;
   --accent-foreground: #ffffff;
 
   /* Border & Input */
-  --border: #1e3a5f;
-  --input: #1e293b;
+  --border: #e2e8f0;
+  --input: #f1f5f9;
   --ring: #3b82f6;
 
   /* Trading Colors */
@@ -41,10 +40,10 @@
   --neutral: #6b7280;
 
   /* Sidebar */
-  --sidebar: #0f172a;
-  --sidebar-foreground: #ffffff;
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #0a0e27;
   --sidebar-primary: #3b82f6;
-  --sidebar-border: #1e3a5f;
+  --sidebar-border: #e2e8f0;
 
   /* Radius */
   --radius: 0.625rem;
@@ -111,15 +110,19 @@
    Base
 ===================== */
 
-* {
-  border-color: var(--border);
-}
+@layer base {
+  * {
+      border-color: var(--border);
+  }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, sans-serif;
+   @apply bg-background text-foreground;
+}
+}
+
+
+@layer utilities {
+  
 }
 
 /* =====================
@@ -127,6 +130,20 @@ body {
 ===================== */
 
 @layer components {
+
+
+  .container {
+    @apply mx-auto max-w-screen-2xl px-4 md:px-6 lg:px-8;
+  }
+
+   .header {
+    @apply z-50 w-full h-16  ;
+  }
+  .header-wrapper {
+    @apply flex justify-between items-center;
+  }
+
+
   /* Cards */
   .trading-card {
     @apply bg-card border rounded-lg shadow-sm transition-shadow;
@@ -245,6 +262,9 @@ body {
     @apply px-4 py-2 rounded-md font-medium transition-opacity;
   }
 
+   .btn-auth {
+    @apply  text-foreground flex items-center gap-2 hover:scale-110 transition-transform border ;
+  }
   .btn-primary:hover {
     @apply opacity-90;
   }

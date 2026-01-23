@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Schibsted_Grotesk, Martian_Mono } from "next/font/google";
 import "./globals.css";
-
+import Header from "@/components/Header";
 import Beams from "@/components/Beams";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 const schibstedGrotesk = Schibsted_Grotesk({
   variable: "--font-schibsted-grotesk",
@@ -25,11 +26,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${schibstedGrotesk.variable} ${martianMono.variable}  antialiased`}
       >
-        <div className="absolute inset-0 top-0  z-[-1] min-h-screen ">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header />
+          {/* <div className="absolute inset-0 top-0  z-[-1] ">
           <Beams
             beamWidth={2}
             beamHeight={11}
@@ -40,9 +48,10 @@ export default function RootLayout({
             scale={0.2}
             rotation={0}
           />
-        </div>
+        </div> */}
 
-        <main>{children}</main>
+          <main>{children}</main>
+        </ThemeProvider>
       </body>
     </html>
   );
