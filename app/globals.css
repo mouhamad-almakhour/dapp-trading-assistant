@@ -232,11 +232,11 @@ body {
   }
 
   .carousel-dot.active {
-    `@apply` w-12 h-3 bg-foreground;
+    @apply w-12 h-3 bg-foreground;
   }
 
   .carousel-dot.inactive {
-    `@apply` w-3 h-3 bg-foreground/30 hover:bg-foreground/50;
+    @apply w-3 h-3 bg-foreground/30 hover:bg-foreground/50;
   }
   
 
