@@ -45,10 +45,12 @@ const NavItems = () => {
     </li>
   );
 
+  const isAuthPage = pathname === "/sign-in" || pathname === "/sign-up";
+
   return (
     <ul className="flex flex-col sm:flex-row p-2 gap-3 sm:gap-10 font-medium">
       {isActive("/") ? (
-        <li key="mode-toggle">
+        <li key="home">
           <div className="flex flex-col lg:flex-row gap-2 items-center justify-center">
             <Button asChild variant="ghost" size="lg" className="btn-auth">
               <Link href="/sign-in">Login</Link>
@@ -58,6 +60,10 @@ const NavItems = () => {
             </Button>
             <ModeToggle />
           </div>
+        </li>
+      ) : isAuthPage ? (
+        <li key="mode-toggle">
+          <ModeToggle />
         </li>
       ) : (
         NAV_ITEMS.map(({ href, label }) => (
