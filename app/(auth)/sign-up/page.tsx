@@ -28,6 +28,7 @@ export default function SignUp() {
     register,
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<SignUpFormData>({
     defaultValues: {
@@ -68,28 +69,37 @@ export default function SignUp() {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const files = e.target.files;
 
-    // Validate it's an image
-    if (!file) {
+    if (!files || files.length === 0) {
+      setValue("image", undefined); // reset the form field
+      setImagePreview(null);
       return;
     }
-    if (!["image/png", "image/jpeg"].includes(file.type)) {
+
+    const file = files[0];
+
+    // Validate file type
+    if (!["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
       toast.error("Invalid image type", {
         description: "Only PNG, JPG or JPEG images are allowed",
         position: "top-center",
       });
       e.target.value = "";
+      setValue("image", undefined); // reset RHF field
       setImagePreview(null);
       return;
     }
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+
+    // Update React Hook Form
+    setValue("image", files);
+
+    // Show preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
