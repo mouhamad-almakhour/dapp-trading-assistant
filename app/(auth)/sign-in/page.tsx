@@ -19,9 +19,11 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import InputField from "@/components/forms/inputField";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
-  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const [rememberMe, setRememberMe] = useState(false);
 
   const {
@@ -43,11 +45,40 @@ export default function SignIn() {
       rememberMe,
       callbackURL: "/dashboard",
       fetchOptions: {
-        onRequest: () => {
-          setLoading(true);
+        onError: (ctx) => {
+          toast.error("Sign in failed", {
+            description:
+              ctx.error.message || "An error occurred during sign in",
+            position: "top-center",
+          });
         },
-        onResponse: () => {
-          setLoading(false);
+        onSuccess: () => {
+          toast.success("Signed in successfully!", {
+            description: "You have successfully signed in.",
+          });
+          router.push("/dashboard");
+        },
+      },
+    });
+  };
+
+  const handelSocialSignIn = async (provider: "google" | "github") => {
+    await signIn.social({
+      provider,
+      callbackURL: "/dashboard",
+      fetchOptions: {
+        onError: (ctx) => {
+          toast.error("Sign in failed", {
+            description:
+              ctx.error.message || "An error occurred during sign in",
+            position: "top-center",
+          });
+        },
+        onSuccess: () => {
+          toast.success("Signed in successfully!", {
+            description: "You have successfully signed in.",
+          });
+          router.push("/dashboard");
         },
       },
     });
@@ -75,7 +106,7 @@ export default function SignIn() {
                 validation={{
                   required: "Email is required",
                   pattern: {
-                    value: /^\S+@\S+$/,
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     message: "Invalid email address",
                   },
                 }}
@@ -90,7 +121,13 @@ export default function SignIn() {
                 type="password"
                 register={register}
                 error={errors.password}
-                validation={{ required: "password required", minLength: 8 }}
+                validation={{
+                  required: "password required",
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
+                }}
               />
             </div>
             <div className="grid gap-2">
@@ -111,12 +148,8 @@ export default function SignIn() {
                 </Link>
               </div>
             </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading || isSubmitting}
-            >
-              {loading ? (
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? (
                 <Loader2 size={16} className="animate-spin" />
               ) : (
                 <p>Login</p>
@@ -131,21 +164,8 @@ export default function SignIn() {
               <Button
                 variant="outline"
                 className="w-full gap-2"
-                disabled={loading}
-                onClick={async () => {
-                  await signIn.social({
-                    provider: "google",
-                    callbackURL: "/dashboard",
-                    fetchOptions: {
-                      onRequest: () => {
-                        setLoading(true);
-                      },
-                      onResponse: () => {
-                        setLoading(false);
-                      },
-                    },
-                  });
-                }}
+                disabled={isSubmitting}
+                onClick={async () => handelSocialSignIn("google")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -175,21 +195,8 @@ export default function SignIn() {
               <Button
                 variant="outline"
                 className="w-full gap-2"
-                disabled={loading}
-                onClick={async () => {
-                  await signIn.social({
-                    provider: "github",
-                    callbackURL: "/dashboard",
-                    fetchOptions: {
-                      onRequest: () => {
-                        setLoading(true);
-                      },
-                      onResponse: () => {
-                        setLoading(false);
-                      },
-                    },
-                  });
-                }}
+                disabled={isSubmitting}
+                onClick={() => handelSocialSignIn("github")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

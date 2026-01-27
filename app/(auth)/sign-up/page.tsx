@@ -9,8 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import { useState } from "react";
 import Image from "next/image";
 import { Loader2, X } from "lucide-react";
@@ -22,14 +21,13 @@ import { useForm } from "react-hook-form";
 import InputField from "@/components/forms/inputField";
 
 export default function SignUp() {
-  const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<SignUpFormData>({
     defaultValues: {
@@ -38,28 +36,31 @@ export default function SignUp() {
       email: "",
       password: "",
       passwordConfirmation: "",
+      image: undefined,
     },
     mode: "onBlur",
   });
 
   const onSubmit = async (data: SignUpFormData) => {
+    const file = data.image?.[0];
     await signUp.email({
+      name: `${data.firstName} ${data.lastName}`,
       email: data.email,
       password: data.password,
-      name: `${data.firstName} ${data.lastName}`,
-      image: image ? await convertImageToBase64(image) : "",
+      image: file ? await convertImageToBase64(file) : "",
       callbackURL: "/dashboard",
       fetchOptions: {
-        onResponse: () => {
-          setLoading(false);
-        },
-        onRequest: () => {
-          setLoading(true);
-        },
         onError: (ctx) => {
-          toast.error(ctx.error.message);
+          toast.error("Sign up failed", {
+            description:
+              ctx.error.message || "An error occurred during sign up",
+            position: "top-center",
+          });
         },
         onSuccess: () => {
+          toast.success("Account created!", {
+            description: "You have successfully signed up.",
+          });
           router.push("/dashboard");
         },
       },
@@ -68,8 +69,21 @@ export default function SignUp() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
+    // Validate it's an image
+    if (!file) {
+      return;
+    }
+    if (!["image/png", "image/jpeg"].includes(file.type)) {
+      toast.error("Invalid image type", {
+        description: "Only PNG, JPG or JPEG images are allowed",
+        position: "top-center",
+      });
+      e.target.value = "";
+      setImagePreview(null);
+      return;
+    }
     if (file) {
-      setImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -99,7 +113,7 @@ export default function SignUp() {
                   error={errors.firstName}
                   validation={{
                     required: "First name is required",
-                    minLength: 2,
+                    minLength: 1,
                   }}
                 />
               </div>
@@ -112,7 +126,7 @@ export default function SignUp() {
                   error={errors.lastName}
                   validation={{
                     required: "Last name is required",
-                    minLength: 2,
+                    minLength: 1,
                   }}
                 />
               </div>
@@ -122,6 +136,7 @@ export default function SignUp() {
                 name="email"
                 label="Email"
                 placeholder="Email"
+                type="email"
                 register={register}
                 error={errors.email}
                 validation={{
@@ -139,28 +154,33 @@ export default function SignUp() {
                 label="Password"
                 placeholder="Password"
                 register={register}
+                type="password"
                 error={errors.password}
                 validation={{
                   required: "Password is required",
-                  minLength: 8,
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
                 }}
               />
             </div>
             <div className="grid gap-2">
               <InputField
-                name="confirmPassword"
+                name="passwordConfirmation"
                 label="Confirm Password"
+                type="password"
                 placeholder="Confirm Password"
                 register={register}
                 error={errors.passwordConfirmation}
                 validation={{
-                  required: "Confirm password is required",
-                  minLength: 8,
+                  required: "Please confirm password",
+                  validate: (val: string) =>
+                    val === getValues("password") || "Passwords don't match",
                 }}
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="image">Profile Image (optional)</Label>
               <div className="flex items-end gap-4">
                 {imagePreview && (
                   <div className="relative w-16 h-16 rounded-sm overflow-hidden">
@@ -173,18 +193,52 @@ export default function SignUp() {
                   </div>
                 )}
                 <div className="flex items-center gap-2 w-full">
-                  <Input
-                    id="image"
+                  <InputField
+                    name="image"
+                    label="Profile Image (optional)"
+                    placeholder="Profile Image"
+                    register={register}
                     type="file"
-                    accept="image/*"
+                    error={errors.image}
+                    accept=".png,.jpg,.jpeg"
+                    validation={{
+                      validate: {
+                        fileType: (files: FileList) => {
+                          if (!files?.length) return true;
+                          const file = files[0];
+                          // Check MIME type (image/png, image/jpeg, etc)
+                          const allowedTypes = [
+                            "image/png",
+                            "image/jpeg",
+                            "image/jpg",
+                          ];
+                          return (
+                            allowedTypes.includes(file.type) ||
+                            "Only PNG, JPG or JPEG images are allowed"
+                          );
+                        },
+                        fileSize: (files: FileList) => {
+                          if (!files?.length) return true;
+                          return (
+                            files[0].size <= 2 * 1024 * 1024 ||
+                            "Image must be smaller than 2MB"
+                          );
+                        },
+                      },
+                    }}
                     onChange={handleImageChange}
-                    className="w-full"
                   />
+
                   {imagePreview && (
                     <X
                       className="cursor-pointer"
                       onClick={() => {
-                        setImage(null);
+                        const fileInput = document.querySelector(
+                          'input[name="image"]',
+                        ) as HTMLInputElement;
+                        if (fileInput) {
+                          fileInput.value = "";
+                        }
                         setImagePreview(null);
                       }}
                     />
@@ -192,12 +246,8 @@ export default function SignUp() {
                 </div>
               </div>
             </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading || isSubmitting}
-            >
-              {loading ? (
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? (
                 <Loader2 size={16} className="animate-spin" />
               ) : (
                 "Create your account"

@@ -10,11 +10,12 @@ declare global {
     label: string;
     placeholder: string;
     type?: string;
+    accept?: string;
     register: UseFormRegister;
     error?: FieldError;
     validation?: RegisterOptions;
     disabled?: boolean;
-    value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   };
   type SignInFormData = {
     email: string;
@@ -27,7 +28,7 @@ declare global {
     email: string;
     password: string;
     passwordConfirmation: string;
-    image?: File | null;
+    image?: FileList;
   };
 }
 

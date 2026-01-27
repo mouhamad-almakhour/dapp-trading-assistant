@@ -7,11 +7,12 @@ const InputField = ({
   label,
   placeholder,
   type = "text",
+  accept,
   register,
   error,
   validation,
   disabled,
-  value,
+  onChange,
 }: FormInputProps) => {
   return (
     <div className="space-y-2">
@@ -19,17 +20,22 @@ const InputField = ({
         {label}
       </Label>
       <Input
-        type={type}
         id={name}
+        type={type}
+        accept={accept}
         placeholder={placeholder}
         disabled={disabled}
-        value={value}
         className={cn("form-input", {
           "opacity-50 cursor-not-allowed": disabled,
         })}
         {...register(name, validation)}
+        onChange={onChange}
       />
-      {error && <p className="text-sm text-red-500">{error.message}</p>}
+      {error && (
+        <p className="text-sm text-red-500 dark:text-red-400">
+          {error.message}
+        </p>
+      )}
     </div>
   );
 };

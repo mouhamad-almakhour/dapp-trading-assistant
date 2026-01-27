@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Schibsted_Grotesk, Martian_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-
+import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
 const schibstedGrotesk = Schibsted_Grotesk({
@@ -39,6 +39,7 @@ export default function RootLayout({
           <Header />
 
           <main>{children}</main>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
