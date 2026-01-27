@@ -137,7 +137,7 @@ body {
   }
 
    .header {
-    @apply z-50 w-full h-16  ;
+    @apply z-50 w-full h-16 py-2 ;
   }
   .header-wrapper {
     @apply flex justify-between items-center;

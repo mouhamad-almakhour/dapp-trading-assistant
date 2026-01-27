@@ -7,7 +7,7 @@ import Link from "next/link";
 const ExploreBtn = () => {
   return (
     <Button variant="ghost" size="lg" className="btn-explore">
-      <Link href="/dashboard">Explore Now</Link>
+      <Link href="/sign-in">Explore Now</Link>
       <ArrowDown size={20} />
     </Button>
   );

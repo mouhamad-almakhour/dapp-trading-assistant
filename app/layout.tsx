@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Schibsted_Grotesk, Martian_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-import Beams from "@/components/Beams";
+import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
 const schibstedGrotesk = Schibsted_Grotesk({
@@ -37,20 +37,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          {/* <div className="absolute inset-0 top-0  z-[-1] ">
-          <Beams
-            beamWidth={2}
-            beamHeight={11}
-            beamNumber={10}
-            lightColor="#ffffff"
-            speed={1.8}
-            noiseIntensity={0.5}
-            scale={0.2}
-            rotation={0}
-          />
-        </div> */}
 
           <main>{children}</main>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
