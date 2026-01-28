@@ -13,12 +13,13 @@ import {
 import { useState } from "react";
 import Image from "next/image";
 import { Loader2, X } from "lucide-react";
-import { signUp } from "@/lib/actions/auth-client";
+import { signUp } from "@/lib/better-auth/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import InputField from "@/components/forms/inputField";
+import { signUpWithEmail } from "@/lib/actions/auth.actions";
 
 export default function SignUp() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -43,29 +44,42 @@ export default function SignUp() {
   });
 
   const onSubmit = async (data: SignUpFormData) => {
-    const file = data.image?.[0];
-    await signUp.email({
-      name: `${data.firstName} ${data.lastName}`,
-      email: data.email,
-      password: data.password,
-      image: file ? await convertImageToBase64(file) : "",
-      callbackURL: "/dashboard",
-      fetchOptions: {
-        onError: (ctx) => {
-          toast.error("Sign up failed", {
-            description:
-              ctx.error.message || "An error occurred during sign up",
-            position: "top-center",
-          });
-        },
-        onSuccess: () => {
-          toast.success("Account created!", {
-            description: "You have successfully signed up.",
-          });
-          router.push("/dashboard");
-        },
-      },
-    });
+    try {
+      let imageBase64: string | undefined;
+
+      if (data.image?.[0]) {
+        imageBase64 = await convertImageToBase64(data.image[0]);
+      }
+
+      const result = await signUpWithEmail({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+        image: imageBase64,
+      });
+
+      if (!result.success) {
+        toast.error("Sign up failed", {
+          description: result.error,
+          position: "top-center",
+        });
+        return;
+      }
+
+      toast.success("Account created!", {
+        description: "You have successfully signed up.",
+        position: "top-center",
+      });
+
+      router.push("/dashboard");
+    } catch (error) {
+      toast.error("Something went wrong", {
+        description:
+          error instanceof Error ? error.message : "Please try again later.",
+        position: "top-center",
+      });
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

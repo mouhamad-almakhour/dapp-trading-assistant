@@ -1,7 +1,12 @@
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
+import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { db } from "@/database/db";
 
 export const auth = betterAuth({
+  database: mongodbAdapter(db),
+  secret: process.env.BETTER_AUTH_SECRET!,
+  baseURL: process.env.BETTER_AUTH_URL!,
   emailAndPassword: {
     enabled: true,
     async sendResetPassword(data, request) {

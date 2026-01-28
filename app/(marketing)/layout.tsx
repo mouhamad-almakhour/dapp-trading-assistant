@@ -1,10 +1,12 @@
+import { auth } from "@/lib/better-auth/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import LightRays from "@/components/LightRays";
 
-export default function MarketingLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const layout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  if (session?.user) redirect("/dashboard");
   return (
     <div className="relative min-h-screen">
       <div className="fixed inset-0 -z-10 hidden md:block">
@@ -28,4 +30,5 @@ export default function MarketingLayout({
       <main>{children}</main>
     </div>
   );
-}
+};
+export default layout;
