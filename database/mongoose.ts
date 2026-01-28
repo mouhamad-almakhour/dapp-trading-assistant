@@ -31,7 +31,11 @@ export const connectToDatabase = async () => {
     throw err;
   }
 
-  console.log(`Connected to database ${process.env.NODE_ENV} - ${MONGODB_URI}`);
+  const { host, name } = mongoose.connection;
+
+  console.log(
+    `Connected to database [env=${process.env.NODE_ENV}, host=${host}, db=${name}]`,
+  );
 
   return cached.conn;
 };
