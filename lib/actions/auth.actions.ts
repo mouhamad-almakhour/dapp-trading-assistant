@@ -11,7 +11,7 @@ export const signUpWithEmail = async ({
   image,
 }: SignUpServerData) => {
   try {
-    const result = await auth.api.signUpEmail({
+    const response = await auth.api.signUpEmail({
       body: {
         name: `${firstName} ${lastName}`,
         email,
@@ -20,7 +20,7 @@ export const signUpWithEmail = async ({
       },
     });
 
-    return { success: true, data: result };
+    return { success: true, data: response };
   } catch (e) {
     console.error("Error during sign-up:", e);
 
@@ -34,7 +34,7 @@ export const signInWithEmail = async ({
   email,
   password,
   rememberMe,
-}: SignInFormData) => {
+}: SignInServerData) => {
   try {
     const response = await auth.api.signInEmail({
       body: { email, password, rememberMe },
@@ -54,5 +54,40 @@ export const signOut = async () => {
   } catch (e) {
     console.log("Sign out failed", e instanceof Error);
     return { success: false, error: "Sign out failed" };
+  }
+};
+
+export const forgetPasswordRequest = async ({
+  email,
+}: ForgetPasswordServerData) => {
+  try {
+    const response = await auth.api.requestPasswordReset({
+      body: {
+        email, // required
+        redirectTo: '/reset-password',
+      },
+    });
+    return { success: true, data: response };
+  } catch (e) {
+    console.error("Error during password reset request:", e instanceof Error);
+    return { success: false, error: "Password reset failed" };
+  }
+};
+
+export const resetPassword = async ({
+  password,
+  token,
+}: ResetPasswordServerData) => {
+  try {
+    const response = await auth.api.resetPassword({
+      body: {
+        newPassword: password, // required
+        token, // required
+      },
+    });
+    return { success: true, data: response };
+  } catch (e) {
+    console.error("Error during password reset:", e);
+    return { success: false, error: "Password reset failed" };
   }
 };
