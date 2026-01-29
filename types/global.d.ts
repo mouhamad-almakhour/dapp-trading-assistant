@@ -20,6 +20,7 @@ declare global {
   type SignInFormData = {
     email: string;
     password: string;
+    rememberMe?: boolean;
   };
 
   type SignUpFormData = {
@@ -30,6 +31,44 @@ declare global {
     passwordConfirmation: string;
     image?: FileList;
   };
-}
+  type ForgetPasswordFormValues = {
+    email: string;
+    hostname?: string;
+  };
+  type ResetPasswordFormValues = {
+    password: string;
+    passwordConfirmation: string;
+  };
+  type SendEmailValues = {
+    name: string;
+    email: string;
+    subject: string;
+    url: string;
+    htmlTemplate: string;
 
-export {};
+  }
+
+  type SignUpServerData = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    image?: string; // base64 string
+  };
+
+  type SignInServerData = {
+    email: string;
+    password: string;
+    rememberMe?: boolean;
+  };
+  type ForgetPasswordServerData = {
+    email: string;
+    hostname?: string;
+  };
+
+  type ResetPasswordServerData = {
+    token?: string;
+    password: string;
+  };
+}
+export { };

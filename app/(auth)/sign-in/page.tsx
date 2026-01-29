@@ -14,13 +14,14 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { signIn } from "@/lib/actions/auth-client";
+import { signIn } from "@/lib/better-auth/auth-client";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import InputField from "@/components/forms/inputField";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { signInWithEmail } from "@/lib/actions/auth.actions";
 
 export default function SignIn() {
   const router = useRouter();
@@ -34,32 +35,39 @@ export default function SignIn() {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: false,
     },
     mode: "onBlur",
   });
 
   const onSubmit = async (data: SignInFormData) => {
-    await signIn.email({
-      email: data.email,
-      password: data.password,
-      rememberMe,
-      callbackURL: "/dashboard",
-      fetchOptions: {
-        onError: (ctx) => {
-          toast.error("Sign in failed", {
-            description:
-              ctx.error.message || "An error occurred during sign in",
-            position: "top-center",
-          });
-        },
-        onSuccess: () => {
-          toast.success("Signed in successfully!", {
-            description: "You have successfully signed in.",
-          });
-          router.push("/dashboard");
-        },
-      },
-    });
+    try {
+      const result = await signInWithEmail({
+        email: data.email,
+        password: data.password,
+        rememberMe,
+      });
+
+      if (!result.success) {
+        toast.error("Sign in failed", {
+          description: result.error || "An error occurred during sign in",
+          position: "top-center",
+        });
+        return;
+      }
+
+      toast.success("Signed in successfully!", {
+        description: "You have successfully signed in.",
+      });
+      router.push("/dashboard");
+    } catch (e) {
+      console.error("Error during sign-in:", e);
+      toast.error("Sign in failed", {
+        description:
+          e instanceof Error ? e.message : "An error occurred during sign in",
+        position: "top-center",
+      });
+    }
   };
 
   const handelSocialSignIn = async (provider: "google" | "github") => {
@@ -141,7 +149,7 @@ export default function SignIn() {
                 <Label htmlFor="remember">Remember me</Label>
 
                 <Link
-                  href="#"
+                  href="/forget-password"
                   className="ml-auto inline-block text-sm underline"
                 >
                   Forgot your password?
