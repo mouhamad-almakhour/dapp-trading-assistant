@@ -44,14 +44,18 @@ export default function ResetPassword() {
         }
         try {
             const result = await resetPassword({ password: data.password, token });
-            if (!result.error) {
-                setPasswordResetSuccess(true);
-                toast.success("Password reset successfully!", {
-                    description: "You can now login with your new password.",
+            if (result.error) {
+                toast.error("Password reset failed", {
+                    description: result.error,
                     position: "top-center",
                 });
+                return;
             }
-
+            setPasswordResetSuccess(true);
+            toast.success("Password reset successfully!", {
+                description: "You can now login with your new password.",
+                position: "top-center",
+            });
         } catch (error) {
             console.error("Error during reset password request:", error);
             toast.error("Something went wrong", {
