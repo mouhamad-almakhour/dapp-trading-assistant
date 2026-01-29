@@ -64,7 +64,7 @@ export default function ResetPassword() {
     return (
         <Card className="max-w-md">
             <CardHeader>
-                <CardTitle className="text-lg md:text-xl">Forgot password</CardTitle>
+                <CardTitle className="text-lg md:text-xl">Reset password</CardTitle>
                 <CardDescription className="text-xs md:text-sm">
                     {passwordResetSuccess
                         ? "Your password has been updated successfully."
