@@ -6,31 +6,25 @@ import { redirect } from "next/navigation";
 const layout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth.api.getSession({ headers: await headers() });
 
-  if (!session?.session.userId) redirect("/sign-in");
-
-  const user = {
-    id: session.session.userId,
-    name: session.user.name,
-    email: session.user.email,
-  };
+  if (!session?.session?.userId) redirect("/sign-in");
 
   return (
     <div className="relative min-h-screen">
       <div className="fixed inset-0 -z-10 hidden md:block">
         <LightRays
-          raysOrigin="bottom-center"
+          raysOrigin="top-center"
           raysColor="#ffffff"
-          raysSpeed={1}
-          lightSpread={1.1}
+          raysSpeed={0.3}
+          lightSpread={0.5}
           rayLength={3}
           followMouse={true}
-          mouseInfluence={0.1}
+          mouseInfluence={0}
           noiseAmount={0}
-          distortion={0.2}
+          distortion={0}
           className="custom-rays"
-          pulsating={false}
+          pulsating
           fadeDistance={1}
-          saturation={0.7}
+          saturation={1}
         />
       </div>
 

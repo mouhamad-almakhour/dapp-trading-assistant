@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NavItems from "@/components/Navitems";
 import { ModeToggle } from "@/components/ModeToggle";
+import UserDropdown from "./UserDropdown";
 
 const Header = () => {
   const pathname = usePathname();
@@ -37,9 +38,11 @@ const Header = () => {
 
         {isDashboard && (
           <div className="flex items-center gap-4">
-            <NavItems variant="dashboard" />
-            {/* <UserDropdown /> */}
+            <div className="hidden sm:block">
+              <NavItems variant="dashboard" />
+            </div>
             <ModeToggle />
+            <UserDropdown />
           </div>
         )}
       </div>
