@@ -46,7 +46,7 @@ export default function ForgetPassword() {
 
       if (!result.success) {
         toast.error("Failed to send reset link", {
-          description: result.error || "An error occurred during password reset request",
+          description: result.error,
           position: "top-center",
         });
         return;
@@ -69,9 +69,7 @@ export default function ForgetPassword() {
   return (
     <Card className="max-w-md">
       <CardHeader>
-        <CardTitle className="text-lg md:text-xl">
-          Forgot password
-        </CardTitle>
+        <CardTitle className="text-lg md:text-xl">Forgot password</CardTitle>
 
         <CardDescription className="text-xs md:text-sm">
           {emailSent
@@ -118,7 +116,6 @@ export default function ForgetPassword() {
               </span>
             </p>
           </div>
-
         )}
       </CardContent>
 

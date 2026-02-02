@@ -50,7 +50,7 @@ export default function SignIn() {
 
       if (!result.success) {
         toast.error("Sign in failed", {
-          description: result.error || "An error occurred during sign in",
+          description: result.error,
           position: "top-center",
         });
         return;
@@ -165,7 +165,7 @@ export default function SignIn() {
             <div
               className={cn(
                 "w-full gap-2 flex items-center",
-                "justify-between flex-col"
+                "justify-between flex-col",
               )}
             ></div>
           </div>

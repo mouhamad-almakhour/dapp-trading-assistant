@@ -23,7 +23,7 @@ const UserDropdown = () => {
   const router = useRouter();
   //   const { address, isConnected, chain } = useConnection();
   //   const disconnect = useDisconnect();
-  const address: string = "0X3959679444";
+  const address: string = "";
   const chain = {
     name: "Ethereum",
     id: 1,

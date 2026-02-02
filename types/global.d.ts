@@ -5,6 +5,20 @@ declare global {
     description: string;
     image: string;
   }
+
+  interface TradingViewWidgetProps {
+    title: string;
+    scriptUrl: string;
+    config: Record<string, unknown>;
+    height?: number;
+    className?: string;
+  }
+
+  interface TickerTapeProps {
+    symbols: string[]; // Array of TradingView symbol strings (required)
+    className?: string;
+    theme?: "light" | "dark";
+  }
   type FormInputProps = {
     name: string;
     label: string;
@@ -45,8 +59,7 @@ declare global {
     subject: string;
     url: string;
     htmlTemplate: string;
-
-  }
+  };
 
   type SignUpServerData = {
     firstName: string;
@@ -70,5 +83,14 @@ declare global {
     token?: string;
     password: string;
   };
+
+  // Stock/Crypto asset interface and test data
+  type StockAsset = {
+    symbol: string;
+    name: string;
+    exchange: string;
+    type: string;
+    isInWatchlist: boolean;
+  };
 }
-export { };
+export {};
