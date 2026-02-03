@@ -25,7 +25,7 @@ export const signUpWithEmail = async ({
     console.error("Error during sign-up:", e);
     return {
       success: false,
-      error: e instanceof Error ? e.message : "Sign up failed",
+      error: "Sign up failed",
     };
   }
 };
