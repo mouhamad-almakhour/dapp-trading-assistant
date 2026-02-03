@@ -26,7 +26,9 @@ export function StatsBar() {
       <StatCard
         title="Bitcoin"
         value={
-          priceLoading ? "—" : `$${formatPrice(prices["BTC"]?.price ?? 0)}`
+          priceLoading || prices["BTC"]?.price == null
+            ? "—"
+            : `$${formatPrice(prices["BTC"].price)}`
         }
         change={prices["BTC"]?.change24h}
         icon={<DollarSign className="h-4 w-4" />}
@@ -36,7 +38,9 @@ export function StatsBar() {
       <StatCard
         title="Ethereum"
         value={
-          priceLoading ? "—" : `$${formatPrice(prices["ETH"]?.price ?? 0)}`
+          priceLoading || prices["ETH"]?.price == null
+            ? "—"
+            : `$${formatPrice(prices["ETH"].price)}`
         }
         change={prices["ETH"]?.change24h}
         icon={<DollarSign className="h-4 w-4" />}
@@ -53,7 +57,7 @@ export function StatsBar() {
           </div>
           <div className="flex items-end gap-2">
             <span className="text-xl font-bold text-foreground">
-              {gasLoading ? "—" : (gas?.standard ?? "—")}
+              {gasLoading || !gas ? "—" : gas.standard}
             </span>
             <span className="text-xs text-muted-foreground mb-0.5">Gwei</span>
           </div>
@@ -63,7 +67,7 @@ export function StatsBar() {
               gasLevelColor[gasLevel],
             )}
           >
-            {gasLoading ? "—" : gasLevel}
+            {gasLoading || !gas ? "—" : gasLevel}
           </div>
         </CardContent>
       </Card>
