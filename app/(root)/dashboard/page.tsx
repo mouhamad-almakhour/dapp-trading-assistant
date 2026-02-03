@@ -1,9 +1,9 @@
-import { ActiveAlerts } from "@/components/dashboard/homeD/ActiveAlerts";
-import { GasMiniWidget } from "@/components/dashboard/homeD/GasMiniWidget";
-import { QuickSwapCard } from "@/components/dashboard/homeD/QuickSwapCard";
-import { RecentActivity } from "@/components/dashboard/homeD/RecentActivity";
-import { StatsBar } from "@/components/dashboard/homeD/StatsBar";
-import { Watchlist } from "@/components/dashboard/homeD/Watchlist";
+import { ActiveAlerts } from "@/components/dashboard/ActiveAlerts";
+import { GasMiniWidget } from "@/components/dashboard/GasMiniWidget";
+import { QuickSwapCard } from "@/components/dashboard/QuickSwapCard";
+import { RecentActivity } from "@/components/dashboard/RecentActivity";
+import { StatsBar } from "@/components/dashboard/StatsBar";
+import { Watchlist } from "@/components/dashboard/Watchlist";
 
 const Dashboard = async () => {
   return (
