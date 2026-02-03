@@ -17,15 +17,15 @@ const Header = () => {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full ",
+        "header",
         "bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60",
       )}
     >
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="container h-16 header-wrapper">
         {/* Logo */}
         <Link
           href={ROUTES.LANDING}
-          className="flex items-center transition-opacity hover:opacity-80"
+          className=" transition-opacity hover:opacity-80"
           aria-label="Go to home"
         >
           <Image
