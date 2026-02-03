@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { NAV_ITEMS } from "@/lib/constants";
-
 type NavVariant = "landing" | "dashboard";
 
 const NavItems = ({ variant }: { variant: NavVariant }) => {

@@ -23,10 +23,10 @@ export const signUpWithEmail = async ({
     return { success: true, data: response };
   } catch (e) {
     console.error("Error during sign-up:", e);
-
-    const errorMessage = e instanceof Error ? e.message : "Sign up failed";
-
-    return { success: false, error: errorMessage };
+    return {
+      success: false,
+      error: "Sign up failed",
+    };
   }
 };
 
@@ -44,7 +44,10 @@ export const signInWithEmail = async ({
     return { success: true, data: response };
   } catch (e) {
     console.log("Sign in failed", e);
-    return { success: false, error: "Sign in failed" };
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : "Unknown error during sign in",
+    };
   }
 };
 
@@ -54,7 +57,10 @@ export const signOut = async () => {
     return { success: true };
   } catch (e) {
     console.error("Sign out failed", e);
-    return { success: false, error: "Sign out failed" };
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : "Sign out failed",
+    };
   }
 };
 
@@ -65,13 +71,16 @@ export const forgetPasswordRequest = async ({
     const response = await auth.api.requestPasswordReset({
       body: {
         email, // required
-        redirectTo: '/reset-password',
+        redirectTo: "/reset-password",
       },
     });
     return { success: true, data: response };
   } catch (e) {
-    console.error("Error during password reset request:", e instanceof Error);
-    return { success: false, error: "Password reset failed" };
+    console.error("Error during password reset request:", e);
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : "Password reset failed",
+    };
   }
 };
 
@@ -89,6 +98,9 @@ export const resetPassword = async ({
     return { success: true, data: response };
   } catch (e) {
     console.error("Error during password reset:", e);
-    return { success: false, error: "Password reset failed" };
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : "Password reset failed",
+    };
   }
 };

@@ -4,91 +4,113 @@
 ===================== */
 
 :root {
-  /* Light Background Colors */
-  --background: #f8fafc;
-  --foreground: #0a0e27;
+  /* Background & text */
+  --background: #f8fafc;        /* soft light gray */
+  --foreground: #0a0e27;        /* dark text for readability */
 
-  /* Card Colors */
-  --card: #ffffff;
-  --card-foreground: #0a0e27;
+  /* Card */
+  --card: #ffffff;               /* white card background */
+  --card-foreground: #0a0e27;  
 
-  /* Primary Colors - Professional Blue */
-  --primary: #3b82f6;
+  /* Primary / highlights */
+  --primary: #0a0e27;            /* main text/buttons */
   --primary-foreground: #ffffff;
 
-  /* Secondary Colors */
-  --secondary: #1e40af;
+  /* Secondary / action buttons */
+  --secondary: #374151;          /* dark gray for secondary buttons */
   --secondary-foreground: #ffffff;
 
-  /* Muted Colors */
-  --muted: #e2e8f0;
-  --muted-foreground: #475569;
+  /* Muted / disabled */
+  --muted: #e5e7eb;              
+  --muted-foreground: #6b7280;  
 
-  /* Neutral Colors */
-  --accent: #0ea5e9;
-  --accent-foreground: #ffffff;
+  /* Accent / info */
+  --accent: #fbbf24;             /* gold for highlights */
+  --accent-foreground: #0a0e27;
 
-  /* Border & Input */
-  --border: #e2e8f0;
-  --input: #f1f5f9;
-  --ring: #3b82f6;
-
-  /* Trading Colors */
-  --green: #10b981;
-  --red: #ef4444;
-  --yellow: #f59e0b;
-  --neutral: #6b7280;
+  /* Borders & inputs */
+  --border: #d1d5db;             
+  --input: #f9fafb;              
+  --ring: #fbbf24;               /* gold focus ring */
 
   /* Sidebar */
-  --sidebar: #f8fafc;
+  --sidebar: #f5f6fa;            
   --sidebar-foreground: #0a0e27;
-  --sidebar-primary: #3b82f6;
-  --sidebar-border: #e2e8f0;
+  --sidebar-primary: #fbbf24;    /* gold highlights in sidebar */
+  --sidebar-border: #d1d5db;
+
+  /* Trading colors */
+  --green: #22c55e;              
+  --red: #ef4444;                
+  --yellow: #facc15;             
+  --neutral: #6b7280;            
 
   /* Radius */
   --radius: 0.625rem;
 
   /* Chart Colors */
-  --chart-1: #3b82f6;
-  --chart-2: #10b981;
-  --chart-3: #f59e0b;
-  --chart-4: #ef4444;
-  --chart-5: #8b5cf6;
+  --chart-1: #facc15;           
+  --chart-2: #22c55e;           
+  --chart-3: #ef4444;           
+  --chart-4: #94a3b8;           
+  --chart-5: #c084fc;           
 }
+
 
 .dark {
-  --background: #0a0e27;
-  --foreground: #f0f4f8;
-  
-  --card: #141d35;
-  --card-foreground: #f0f4f8;
+  /* Background & text */
+  --background: #0b1220;        /* dark slate instead of near-black */
+  --foreground: #e5eaf0;        /* softer off-white */
 
-  --primary: #60a5fa;
-  --primary-foreground: #0a0e27;
+  /* Card */
+  --card: #111827;              /* slightly lighter than background */
+  --card-foreground: #e5eaf0;
 
-  --secondary: #3b82f6;
-  --secondary-foreground: #ffffff;
+  /* Primary / highlights */
+  --primary: #e5eaf0;
+  --primary-foreground: #0b1220;
 
-  --muted: #1e293b;
-  --muted-foreground: #cbd5e1;
+  /* Secondary / action buttons */
+  --secondary: #273449;         /* lighter steel gray */
+  --secondary-foreground: #e5eaf0;
 
-  --accent: #06b6d4;
-  --accent-foreground: #0a0e27;
+  /* Muted / disabled */
+  --muted: #334155;             /* clearer separation */
+  --muted-foreground: #a8b3c7;
 
-  --border: #1e3a5f;
-  --input: #1a2744;
-  --ring: #60a5fa;
+  /* Accent / info */
+  --accent: #fbbf24;
+  --accent-foreground: #0b1220;
 
+  /* Borders & inputs */
+  --border: #334155;            /* more visible borders */
+  --input: #1f2937;             
+  --ring: #fbbf24;
+
+  /* Sidebar */
   --sidebar: #0f172a;
-  --sidebar-foreground: #f0f4f8;
-  --sidebar-primary: #60a5fa;
-  --sidebar-border: #1e3a5f;
+  --sidebar-foreground: #e5eaf0;
+  --sidebar-primary: #fbbf24;
+  --sidebar-border: #334155;
 
-  --green: #34d399;
-  --red: #f87171;
-  --yellow: #fbbf24;
+  /* Trading colors */
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #facc15;
   --neutral: #9ca3af;
+
+  /* Radius */
+  --radius: 0.625rem;
+
+  /* Chart Colors */
+  --chart-1: #facc15;
+  --chart-2: #22c55e;
+  --chart-3: #ef4444;
+  --chart-4: #a8b3c7;           /* brighter muted for axes/grid */
+  --chart-5: #c084fc;
 }
+
+
 
 /* =====================
    Theme bridge
@@ -135,12 +157,23 @@ body {
   .container {
     @apply mx-auto max-w-screen-2xl px-4 md:px-6 lg:px-8;
   }
+  .main-container {
+    @apply w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl px-4;
+  }
 
    .header {
-    @apply z-50 w-full h-16 py-2 ;
+    @apply  sticky top-0 z-50 w-full h-16 ;
   }
   .header-wrapper {
     @apply flex justify-between items-center;
+  }
+
+  .home-wrapper {
+    @apply flex-col gap-4 md:gap-10 items-center sm:items-start;
+  }
+
+  .home-section {
+    @apply w-full gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3;
   }
 
 
@@ -328,6 +361,87 @@ body {
     color: var(--sidebar-foreground);
   }
 
+  /* User Dropdown */
+  .user-dropdown-trigger {
+    @apply flex items-center gap-3 text-muted-foreground transition-colors;
+  }
+
+  .user-dropdown-trigger:hover {
+    color: var(--yellow);
+  }
+
+  .user-dropdown-content {
+    @apply bg-card border rounded-lg shadow-lg min-w-[280px];
+  }
+
+  .user-dropdown-label {
+    @apply flex items-center gap-3 py-3 px-4;
+  }
+
+  .user-dropdown-avatar {
+    @apply h-8 w-8;
+  }
+
+  .user-dropdown-avatar-large {
+    @apply h-10 w-10;
+  }
+
+  .user-dropdown-avatar-fallback {
+    background: var(--yellow);
+    color: var(--background);
+    @apply text-sm font-bold;
+  }
+
+  .user-dropdown-name {
+    @apply text-base font-medium text-foreground;
+  }
+
+  .user-dropdown-email {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .user-dropdown-wallet {
+    @apply flex items-center gap-2;
+  }
+
+  .user-dropdown-chain {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .user-dropdown-separator {
+    background: var(--border);
+    @apply h-px my-1;
+  }
+
+  .user-dropdown-item {
+    @apply flex items-center gap-2 px-4 py-2 text-sm transition-colors;
+    color: var(--card-foreground);
+  }
+
+  .user-dropdown-item:hover {
+    background: var(--muted);
+  }
+
+  .user-dropdown-item:focus {
+    background: var(--muted);
+    outline: none;
+  }
+
+  .user-dropdown-item-danger {
+    color: var(--red);
+    @apply font-medium;
+  }
+
+  .user-dropdown-item-danger:hover {
+    background: transparent;
+    color: var(--red);
+  }
+
+  .user-dropdown-item-danger:focus {
+    background: transparent;
+    color: var(--red);
+  }
+
   /* Modal */
   .modal-overlay {
     @apply fixed inset-0 bg-black/50 backdrop-blur-sm z-50;
@@ -337,4 +451,61 @@ body {
     @apply bg-card border rounded-lg shadow-lg;
     @apply p-6 max-w-lg w-full mx-auto mt-20;
   }
+}
+
+/* TradingView Advanced Chart Widget Styles */
+.tradingview-widget-container {
+  position: relative;
+  background-color: #0a0909 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.tradingview-widget-container__widget {
+  background-color: #0a0909 !important;
+  height: 100% !important;
+
+}
+
+
+/* Custom Scrollbar Styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1e2833;
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #171a34;
+}
+
+/* Table Custom Scrollbar */
+.custom-scrollbar [data-slot='table-container'] {
+  overflow-y: auto;
+}
+
+.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar-thumb {
+  background: #1e2833;
+  border-radius: 8px;
+}
+
+.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar-thumb:hover {
+  background: #171a34;
 }
