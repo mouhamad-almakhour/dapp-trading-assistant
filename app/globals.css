@@ -59,56 +59,57 @@
 
 .dark {
   /* Background & text */
-  --background: #02040a;       /* deep dark navy */
-  --foreground: #f0f4f8;       /* off-white text for readability */
+  --background: #0b1220;        /* dark slate instead of near-black */
+  --foreground: #e5eaf0;        /* softer off-white */
 
   /* Card */
-  --card: #02040a;              /* dark card background */
-  --card-foreground: #f0f4f8;  
+  --card: #111827;              /* slightly lighter than background */
+  --card-foreground: #e5eaf0;
 
   /* Primary / highlights */
-  --primary: #f0f4f8;           /* subtle white for buttons / highlights */
-  --primary-foreground: #0a0e27;
+  --primary: #e5eaf0;
+  --primary-foreground: #0b1220;
 
   /* Secondary / action buttons */
-  --secondary: #1f2937;         /* steel gray instead of bright blue */
-  --secondary-foreground: #f0f4f8;
+  --secondary: #273449;         /* lighter steel gray */
+  --secondary-foreground: #e5eaf0;
 
   /* Muted / disabled */
-  --muted: #1e293b;             
-  --muted-foreground: #94a3b8;  
+  --muted: #334155;             /* clearer separation */
+  --muted-foreground: #a8b3c7;
 
   /* Accent / info */
-  --accent: #fbbf24;            /* gold / highlights for stats */
-  --accent-foreground: #0a0e27;
+  --accent: #fbbf24;
+  --accent-foreground: #0b1220;
 
   /* Borders & inputs */
-  --border: #1e293b;            
-  --input: #1a1f2e;             
-  --ring: #fbbf24;              /* subtle focus ring in gold */
+  --border: #334155;            /* more visible borders */
+  --input: #1f2937;             
+  --ring: #fbbf24;
 
   /* Sidebar */
-  --sidebar: #0f172a;           
-  --sidebar-foreground: #f0f4f8;
-  --sidebar-primary: #fbbf24;   /* highlights in sidebar use gold */
-  --sidebar-border: #1e293b;
+  --sidebar: #0f172a;
+  --sidebar-foreground: #e5eaf0;
+  --sidebar-primary: #fbbf24;
+  --sidebar-border: #334155;
 
   /* Trading colors */
-  --green: #22c55e;             /* bullish */
-  --red: #ef4444;               /* bearish */
-  --yellow: #facc15;            /* warning / highlight */
-  --neutral: #9ca3af;           /* neutral / text info */
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #facc15;
+  --neutral: #9ca3af;
 
   /* Radius */
   --radius: 0.625rem;
 
   /* Chart Colors */
-  --chart-1: #facc15;           /* gold / highlight */
-  --chart-2: #22c55e;           /* green */
-  --chart-3: #ef4444;           /* red */
-  --chart-4: #94a3b8;           /* muted gray */
-  --chart-5: #c084fc;           /* secondary accent */
+  --chart-1: #facc15;
+  --chart-2: #22c55e;
+  --chart-3: #ef4444;
+  --chart-4: #a8b3c7;           /* brighter muted for axes/grid */
+  --chart-5: #c084fc;
 }
+
 
 
 /* =====================
@@ -156,9 +157,12 @@ body {
   .container {
     @apply mx-auto max-w-screen-2xl px-4 md:px-6 lg:px-8;
   }
+  .main-container {
+    @apply w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl px-4;
+  }
 
    .header {
-    @apply z-50 w-full h-16 py-2 ;
+    @apply  sticky top-0 z-50 w-full h-16 ;
   }
   .header-wrapper {
     @apply flex justify-between items-center;
@@ -461,4 +465,47 @@ body {
   background-color: #0a0909 !important;
   height: 100% !important;
 
+}
+
+
+/* Custom Scrollbar Styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1e2833;
+  border-radius: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #171a34;
+}
+
+/* Table Custom Scrollbar */
+.custom-scrollbar [data-slot='table-container'] {
+  overflow-y: auto;
+}
+
+.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar-thumb {
+  background: #1e2833;
+  border-radius: 8px;
+}
+
+.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar-thumb:hover {
+  background: #171a34;
 }

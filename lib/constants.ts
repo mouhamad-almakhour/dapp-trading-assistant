@@ -25,6 +25,13 @@ export const FEATURES: Feature[] = [
     image: "/images/ai-summaries.png",
   },
 ];
+const COINGECKO_IDS: Record<string, string> = {
+  BTC: "bitcoin",
+  ETH: "ethereum",
+  SOL: "solana",
+  LINK: "chainlink",
+  USDC: "usd-coin",
+};
 
 export const NAV_ITEMS = [{ href: "/search", label: "Search" }];
 
@@ -347,3 +354,51 @@ export const MARKET_OVERVIEW_WIDGET_CONFIG = {
   showSymbolLogo: true,
   showChart: true,
 };
+
+export const GAS_LEVEL_STYLES = {
+  low: {
+    badge:
+      "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+    label: "Low - Good time to transact",
+  },
+  medium: {
+    badge:
+      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+    label: "Medium - Normal activity",
+  },
+  high: {
+    badge: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
+    label: "High - Consider waiting",
+  },
+} as const;
+
+export const GAS_TYPES = ["slow", "standard", "fast"] as const;
+
+export const GAS_TYPE_STYLES: Record<string, string> = {
+  slow: "text-green-600 dark:text-green-400",
+  standard: "text-yellow-600 dark:text-yellow-400",
+  fast: "text-red-600 dark:text-red-400",
+};
+
+export const COIN_IDS: Record<string, string> = {
+  BTC: "bitcoin",
+  ETH: "ethereum",
+  SOL: "solana",
+  LINK: "chainlink",
+  USDC: "usd-coin",
+  USDT: "tether",
+  DOGE: "dogecoin",
+  ADA: "cardano",
+  DOT: "polkadot",
+  AVAX: "avalanche-2",
+  MATIC: "matic-network",
+  UNI: "uniswap",
+};
+
+// Default tokens in watchlist
+export const DEFAULT_WATCHLIST: WatchlistToken[] = [
+  { symbol: "BTC", addedAt: Date.now() },
+  { symbol: "ETH", addedAt: Date.now() },
+  { symbol: "SOL", addedAt: Date.now() },
+  { symbol: "LINK", addedAt: Date.now() },
+];
