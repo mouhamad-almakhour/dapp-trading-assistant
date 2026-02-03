@@ -19,18 +19,20 @@ export function useWatchlist(): UseWatchlistReturn {
     .filter(Boolean) as WatchlistItem[];
 
   const addToken = useCallback((symbol: string) => {
+    const normalized = symbol.toUpperCase();
     setTokens((prev) => {
-      if (prev.find((t) => t.symbol === symbol)) return prev;
-      return [...prev, { symbol: symbol.toUpperCase(), addedAt: Date.now() }];
+      if (prev.find((t) => t.symbol === normalized)) return prev;
+      return [...prev, { symbol: normalized, addedAt: Date.now() }];
     });
   }, []);
 
   const removeToken = useCallback((symbol: string) => {
-    setTokens((prev) => prev.filter((t) => t.symbol !== symbol));
+    const normalized = symbol.toUpperCase();
+    setTokens((prev) => prev.filter((t) => t.symbol !== normalized));
   }, []);
 
   const isWatched = useCallback(
-    (symbol: string) => !!tokens.find((t) => t.symbol === symbol),
+    (symbol: string) => !!tokens.find((t) => t.symbol === symbol.toUpperCase()),
     [tokens],
   );
 
