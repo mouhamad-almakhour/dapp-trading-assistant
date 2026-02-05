@@ -1,13 +1,11 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import { useGasPrice } from "./useGasPrice";
 
 function generateId(): string {
   return `alert_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 }
 
-export function useAlerts(): UseAlertsReturn {
-  const { gas } = useGasPrice();
+export function useAlerts(gas: GasPriceData | null): UseAlertsReturn {
   const [alerts, setAlerts] = useState<Alert[]>([
     {
       id: "alert_default_1",

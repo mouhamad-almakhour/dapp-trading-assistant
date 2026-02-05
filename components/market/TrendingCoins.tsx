@@ -19,12 +19,11 @@ const TrendingCoins = async () => {
   const columns: DataTableColumn<TrendingCoin>[] = [
     {
       header: "Name",
-      cellClassName: "name-cell",
       cell: (coin) => {
         const item = coin.item;
 
         return (
-          <Link href={`/coins/${item.id}`}>
+          <Link href={`/market/${item.symbol.toUpperCase()}USDT`}>
             <Image src={item.large} alt={item.name} width={36} height={36} />
             <p>{item.name}</p>
           </Link>
@@ -33,7 +32,6 @@ const TrendingCoins = async () => {
     },
     {
       header: "24h Change",
-      cellClassName: "change-cell",
       cell: (coin) => {
         const item = coin.item;
         const isTrendingUp = item.data.price_change_percentage_24h.usd > 0;
@@ -59,7 +57,6 @@ const TrendingCoins = async () => {
     },
     {
       header: "Price",
-      cellClassName: "price-cell",
       cell: (coin) => formatCurrency(coin.item.data.price),
     },
   ];
@@ -72,9 +69,6 @@ const TrendingCoins = async () => {
         data={tradinglist.slice(0, 6) || []}
         columns={columns}
         rowKey={(coin) => coin.item.id}
-        tableClassName="trending-coins-table"
-        headerCellClassName="py-3!"
-        bodyCellClassName="py-2!"
       />
     </div>
   );

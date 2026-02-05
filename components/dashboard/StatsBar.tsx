@@ -1,10 +1,12 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { TrendingUp, Fuel, DollarSign } from "lucide-react";
+import { TrendingUp, Fuel, ArrowRight } from "lucide-react";
 import { calculateGasLevel, cn } from "@/lib/utils";
 import { StatCard } from "@/components/StatCard";
-
+import { ROUTES } from "@/lib/config/routes";
+import Link from "next/link";
+import Image from "next/image";
 type StatsBarProps = {
   markets: CoinMarketData[]; // already an array, not wrapped in data
   gas: GasPriceData | null;
@@ -39,7 +41,14 @@ export function StatsBar({ markets, gas }: StatsBarProps) {
             : "—"
         }
         change={priceMap.bitcoin?.price_change_percentage_24h}
-        icon={<DollarSign className="h-4 w-4" />}
+        icon={
+          <Image
+            src={priceMap.bitcoin.image}
+            alt={priceMap.bitcoin.name}
+            width={32}
+            height={32}
+          />
+        }
       />
 
       {/* ETH */}
@@ -51,12 +60,19 @@ export function StatsBar({ markets, gas }: StatsBarProps) {
             : "—"
         }
         change={priceMap.ethereum?.price_change_percentage_24h}
-        icon={<DollarSign className="h-4 w-4" />}
+        icon={
+          <Image
+            src={priceMap.ethereum.image}
+            alt={priceMap.ethereum.name}
+            width={32}
+            height={32}
+          />
+        }
       />
 
       {/* Gas */}
-      <Card className="trading-card">
-        <CardContent className="p-4">
+      <Card className="stats-card">
+        <CardContent className="p-4 py-0.5">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs text-muted-foreground uppercase tracking-wide">
               Gas Price
@@ -73,11 +89,20 @@ export function StatsBar({ markets, gas }: StatsBarProps) {
 
           <div
             className={cn(
-              "text-xs font-semibold mt-1 capitalize",
+              "mt-1 flex items-center justify-between text-xs font-semibold capitalize",
               gasLevelColor[gasLevel],
             )}
           >
             {gas ? gasLevel : "—"}
+
+            {/* Link */}
+            <Link
+              href={ROUTES.GAS_TRACKER}
+              className="flex items-center gap-1 text-xs text-primary hover:underline"
+            >
+              Gas Tracker
+              <ArrowRight className="h-3 w-3" />
+            </Link>
           </div>
         </CardContent>
       </Card>

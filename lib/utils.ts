@@ -50,7 +50,7 @@ export function trendingClasses(value: number) {
 export const calculateGasLevel = (
   standard: number,
 ): "low" | "medium" | "high" => {
-  if (standard <= 20) return "low";
-  if (standard <= 50) return "medium";
+  if (standard <= 15) return "low";
+  if (standard <= 40) return "medium";
   return "high";
 };

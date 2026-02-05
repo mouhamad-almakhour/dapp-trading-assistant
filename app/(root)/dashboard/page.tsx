@@ -1,6 +1,4 @@
 import { ActiveAlerts } from "@/components/dashboard/ActiveAlerts";
-import { GasMiniWidget } from "@/components/dashboard/GasMiniWidget";
-import { QuickSwapCard } from "@/components/dashboard/QuickSwapCard";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { StatsBar } from "@/components/dashboard/StatsBar";
 import { Watchlist } from "@/components/dashboard/Watchlist";
@@ -19,14 +17,11 @@ const Dashboard = async () => {
     <div className="space-y-6">
       {/* 1. Stats Bar - top */}
       <StatsBar markets={markets.data ?? []} gas={gas} />
+      {/* <GasMiniWidget gas={gas} /> */}
 
       {/* 2. Gas + Quick Swap */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Watchlist />
-        <QuickSwapCard />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <GasMiniWidget gas={gas} />
         <Suspense fallback={<TrendingCoinsFallback />}>
           <TrendingCoins />
         </Suspense>
@@ -34,7 +29,7 @@ const Dashboard = async () => {
 
       {/* 4. Watchlist + Active Alerts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ActiveAlerts />
+        <ActiveAlerts gas={gas} />
         <RecentActivity />
       </div>
     </div>

@@ -8,8 +8,12 @@ import { Bell, ArrowRight, Fuel } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/config/routes";
 
-export function ActiveAlerts() {
-  const { activeAlerts, loading } = useAlerts();
+interface ActiveAlertsProps {
+  gas: GasPriceData | null;
+}
+
+export function ActiveAlerts(gas: ActiveAlertsProps) {
+  const { activeAlerts, loading } = useAlerts(gas.gas);
 
   return (
     <Card className="trading-card h-full">
@@ -19,9 +23,15 @@ export function ActiveAlerts() {
             <Bell className="h-4 w-4 text-primary" />
             Active Alerts
           </CardTitle>
-          <Badge variant="secondary" className="text-xs">
-            {activeAlerts.length}
-          </Badge>
+          <div className="flex items-center gap-1.5">
+            <span
+              aria-label="live"
+              className="h-2 w-2 rounded-full bg-green-500 animate-pulse"
+            />
+            <span className="text-xs text-muted-foreground">
+              {activeAlerts.length}
+            </span>
+          </div>
         </div>
       </CardHeader>
 
@@ -75,9 +85,10 @@ export function ActiveAlerts() {
                 <Badge
                   variant={alert.triggered ? "default" : "secondary"}
                   className={cn(
-                    "text-xs",
-                    alert.triggered &&
-                      "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+                    "text-xs border",
+                    alert.triggered
+                      ? "bg-green-100 text-green-800  border-green-200 dark:bg-green-900/30 dark:text-green-400  dark:border-green-500/30 animate-pulse"
+                      : "bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-500/30",
                   )}
                 >
                   {alert.triggered ? "Triggered" : "Watching"}

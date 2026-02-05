@@ -49,33 +49,6 @@ export const COIN_TECHNICAL_ANALYSIS_WIDGET_CONFIG = (symbol: string) => ({
   showIntervalTabs: true,
 });
 
-export const COIN_CHART_WIDGET_CONFIG = (symbol: string) => ({
-  allow_symbol_change: false,
-  colorTheme: "dark",
-  calendar: false,
-  details: true,
-  hide_side_toolbar: true,
-  hide_top_toolbar: false,
-  hide_legend: false,
-  hide_volume: false,
-  hotlist: false,
-  interval: "D",
-  locale: "en",
-  save_image: false,
-  style: 1,
-  symbol: symbol.toUpperCase(),
-  theme: "dark",
-  timezone: "Etc/UTC",
-  backgroundColor: "#141414",
-  gridColor: "#141414",
-  watchlist: [],
-  withdateranges: false,
-  compareSymbols: [],
-  studies: [],
-  width: "100%",
-  height: 600,
-});
-
 export const COIN_FINANCIALS_WIDGET_CONFIG = (symbol: string) => ({
   symbol: symbol.toUpperCase(),
   colorTheme: "dark",
@@ -420,3 +393,29 @@ export const POPULAR_TOKENS: SwapToken[] = [
     decimals: 18,
   },
 ];
+
+export const COIN_CHART_WIDGET_CONFIG = (symbol: string) => ({
+  allow_symbol_change: false,
+  calendar: false,
+  details: false,
+  hide_side_toolbar: true,
+  hide_top_toolbar: false,
+  hide_legend: false,
+  hide_volume: false,
+  hotlist: false,
+  interval: "D",
+  locale: "en",
+  save_image: false,
+  style: 10,
+  symbol: symbol.toUpperCase(),
+  theme: "dark",
+  timezone: "Etc/UTC",
+  backgroundColor: "#141414",
+  gridColor: "#141414",
+  watchlist: [],
+  withdateranges: false,
+  compareSymbols: [],
+  studies: [],
+  width: "100%",
+  height: 600,
+});

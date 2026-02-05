@@ -23,11 +23,14 @@ export function GasMiniWidget(gas: GasMiniWidgetProps) {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-base">
             <Fuel className="h-4 w-4 text-primary" />
-            Gas Prices
+            Gas Prices (ETH)
           </CardTitle>
 
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            <span
+              aria-label="live"
+              className="h-2 w-2 rounded-full bg-green-500 animate-pulse"
+            />
             <span className="text-xs text-muted-foreground">Live</span>
           </div>
         </div>
@@ -61,10 +64,10 @@ export function GasMiniWidget(gas: GasMiniWidgetProps) {
 
         {/* Link */}
         <Link
-          href={ROUTES.GAS_TRACKER}
+          href={ROUTES.SWAP}
           className="flex items-center justify-center gap-1 text-xs text-primary hover:underline pt-1"
         >
-          View Full Gas Tracker
+          Go to Swap Calculator
           <ArrowRight className="h-3 w-3" />
         </Link>
       </CardContent>
