@@ -1,4 +1,4 @@
-import { fetcher } from "@/lib/actions/coingecko.actions";
+import { getCategoriesWithMarketData } from "@/lib/actions/coingecko.actions";
 import DataTable from "@/components/DataTable";
 import Image from "next/image";
 import { cn, formatCurrency, formatPercentage } from "@/lib/utils";
@@ -7,7 +7,7 @@ import { CategoriesFallback } from "./fallback";
 
 const Categories = async () => {
   try {
-    const categories = await fetcher<Category[]>("/coins/categories");
+    const categories = await getCategoriesWithMarketData();
 
     const columns: DataTableColumn<Category>[] = [
       {

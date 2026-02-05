@@ -1,4 +1,4 @@
-import { fetcher } from "@/lib/actions/coingecko.actions";
+import { getTrendingCoins } from "@/lib/actions/coingecko.actions";
 import Link from "next/link";
 import Image from "next/image";
 import { cn, formatCurrency, formatPercentage } from "@/lib/utils";
@@ -7,14 +7,10 @@ import DataTable from "@/components/DataTable";
 import { TrendingCoinsFallback } from "./fallback";
 
 const TrendingCoins = async () => {
-  let trendingCoins;
+  let tradinglist;
 
   try {
-    trendingCoins = await fetcher<{ coins: TrendingCoin[] }>(
-      "/search/trending",
-      undefined,
-      300,
-    );
+    tradinglist = await getTrendingCoins();
   } catch (error) {
     console.error("Error fetching trending coins:", error);
     return <TrendingCoinsFallback />;
@@ -73,7 +69,7 @@ const TrendingCoins = async () => {
       <h4>Trending Coins</h4>
 
       <DataTable
-        data={trendingCoins.coins.slice(0, 6) || []}
+        data={tradinglist.slice(0, 6) || []}
         columns={columns}
         rowKey={(coin) => coin.item.id}
         tableClassName="trending-coins-table"

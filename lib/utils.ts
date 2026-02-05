@@ -46,3 +46,11 @@ export function trendingClasses(value: number) {
     iconClass: isTrendingUp ? "icon-up" : "icon-down",
   };
 }
+
+export const calculateGasLevel = (
+  standard: number,
+): "low" | "medium" | "high" => {
+  if (standard <= 20) return "low";
+  if (standard <= 50) return "medium";
+  return "high";
+};

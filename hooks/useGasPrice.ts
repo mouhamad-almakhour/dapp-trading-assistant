@@ -5,32 +5,53 @@ function calculateGasLevel(standard: number): GasLevel {
   if (standard <= 50) return "medium";
   return "high";
 }
-
-export const fakeGasData: GasPriceData = {
-  slow: 18,
-  standard: 26,
-  fast: 38,
-  level: 2, // numeric level (1 = low, 2 = medium, 3 = high)
-  updatedAt: Date.now(),
+type GasOracleResponse = {
+  status: string;
+  message: string;
+  result: {
+    LastBlock: string;
+    SafeGasPrice: string;
+    ProposeGasPrice: string;
+    FastGasPrice: string;
+    suggestBaseFee: string;
+    gasUsedRatio: string;
+  };
 };
 
-export function useGasPrice(interval = 60000): UseGasPriceReturn {
+async function fetchGasOracle(apiKey: string) {
+  const url = `https://api.etherscan.io/v2/api?chainid=1&module=gastracker&action=gasoracle&apikey=${apiKey}`;
+
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    throw new Error(`Etherscan error: ${res.status}`);
+  }
+
+  const data = (await res.json()) as GasOracleResponse;
+
+  if (data.status !== "1") {
+    throw new Error(`Etherscan API error: ${data.message}`);
+  }
+
+  return data.result;
+}
+
+export function useGasPrice(): UseGasPriceReturn {
   const [gas, setGas] = useState<GasPriceData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchGas = useCallback(() => {
+  const fetchGas = useCallback(async () => {
     try {
       setLoading(true);
 
-      // fake dynamic values (feels real)
-      const base = 20 + Math.floor(Math.random() * 20);
+      const gas = await fetchGasOracle(process.env.ETHERSACN_API_KEY!);
 
+      const standard = Number(gas.ProposeGasPrice);
       const data: GasPriceData = {
-        slow: base - 6,
-        standard: base,
-        fast: base + 10,
-        level: base <= 20 ? 1 : base <= 50 ? 2 : 3,
+        slow: Number(gas.SafeGasPrice),
+        standard,
+        fast: Number(gas.FastGasPrice),
         updatedAt: Date.now(),
       };
 
@@ -47,9 +68,7 @@ export function useGasPrice(interval = 60000): UseGasPriceReturn {
 
   useEffect(() => {
     fetchGas();
-    const id = setInterval(fetchGas, interval);
-    return () => clearInterval(id);
-  }, []);
+  }, [fetchGas]);
 
   const gasLevel: GasLevel = gas ? calculateGasLevel(gas.standard) : "medium";
 
@@ -58,6 +77,5 @@ export function useGasPrice(interval = 60000): UseGasPriceReturn {
     gasLevel,
     loading,
     error,
-    refetch: fetchGas,
   };
 }

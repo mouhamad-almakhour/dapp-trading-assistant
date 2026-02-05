@@ -184,11 +184,8 @@ declare global {
   }
 
   interface TrendingResponse {
-    coins: {
-      item: TrendingCoin;
-    }[];
+    coins: TrendingCoin[];
   }
-
   interface TrendingCoin {
     item: {
       id: string;
@@ -230,7 +227,10 @@ declare global {
   interface SimplePriceResponse {
     [coinId: string]: {
       usd: number;
+      usd_market_cap: number;
+      usd_24h_vol: number;
       usd_24h_change?: number;
+      last_updated_at: number;
     };
   }
 
@@ -242,12 +242,8 @@ declare global {
     volume24h: number;
     marketCap: number;
   }
-
-  interface UseCryptoPricesReturn {
-    prices: Record<string, CryptoPrice>;
-    loading: boolean;
-    error: string | null;
-    refetch: () => void;
+  interface SupportedCurrency {
+    symbol: string;
   }
 
   interface StatsBarItem {
@@ -257,19 +253,6 @@ declare global {
     icon?: string;
   }
 
-  interface GasData {
-    slow: number;
-    standard: number;
-    fast: number;
-    level: "low" | "medium" | "high";
-  }
-  interface WatchlistItem {
-    id: string;
-    symbol: string;
-    name: string;
-    price: number;
-    change24h: number;
-  }
   interface Alert {
     id: string;
     type: "gas";
@@ -343,18 +326,16 @@ declare global {
     slow: number;
     standard: number;
     fast: number;
-    level: number;
     updatedAt: number;
   }
 
-  type GasLevel = "low" | "medium" | "high";
+  type GasValueKey = Exclude<keyof GasPriceData, "updatedAt">;
 
   interface UseGasPriceReturn {
     gas: GasPriceData | null;
     gasLevel: GasLevel;
     loading: boolean;
     error: string | null;
-    refetch: () => void;
   }
 
   interface GlobalMarket {
@@ -378,8 +359,8 @@ declare global {
   }
 
   interface UseWatchlistReturn {
+    tokens: WatchlistToken[];
     watchlist: WatchlistItem[];
-    loading: boolean;
     addToken: (symbol: string) => void;
     removeToken: (symbol: string) => void;
     isWatched: (symbol: string) => boolean;
@@ -391,6 +372,37 @@ declare global {
     change?: number;
     icon: React.ReactNode;
     suffix?: string;
+  }
+
+  interface SwapToken {
+    address: string;
+    symbol: string;
+    name: string;
+    decimals: number;
+  }
+
+  interface SwapResult {
+    inputToken: SwapToken;
+    outputToken: SwapToken;
+    inputAmount: string;
+    outputAmount: string;
+    priceImpact: number;
+    estimatedGas: number;
+  }
+  interface UseSwapReturn {
+    inputToken: SwapToken | null;
+    outputToken: SwapToken | null;
+    inputAmount: string;
+    outputAmount: string;
+    result: SwapResult | null;
+    loading: boolean;
+    error: string | null;
+    setInputToken: (token: SwapToken) => void;
+    setOutputToken: (token: SwapToken) => void;
+    setInputAmount: (amount: string) => void;
+    swapTokens: () => void;
+    calculate: () => Promise<void>;
+    reset: () => void;
   }
 }
 export {};

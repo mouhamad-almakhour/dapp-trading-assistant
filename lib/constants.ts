@@ -25,13 +25,6 @@ export const FEATURES: Feature[] = [
     image: "/images/ai-summaries.png",
   },
 ];
-const COINGECKO_IDS: Record<string, string> = {
-  BTC: "bitcoin",
-  ETH: "ethereum",
-  SOL: "solana",
-  LINK: "chainlink",
-  USDC: "usd-coin",
-};
 
 export const NAV_ITEMS = [{ href: "/search", label: "Search" }];
 
@@ -372,7 +365,7 @@ export const GAS_LEVEL_STYLES = {
   },
 } as const;
 
-export const GAS_TYPES = ["slow", "standard", "fast"] as const;
+export const GAS_TYPES: GasValueKey[] = ["slow", "standard", "fast"];
 
 export const GAS_TYPE_STYLES: Record<string, string> = {
   slow: "text-green-600 dark:text-green-400",
@@ -391,14 +384,39 @@ export const COIN_IDS: Record<string, string> = {
   ADA: "cardano",
   DOT: "polkadot",
   AVAX: "avalanche-2",
-  MATIC: "matic-network",
   UNI: "uniswap",
 };
 
-// Default tokens in watchlist
-export const DEFAULT_WATCHLIST: WatchlistToken[] = [
-  { symbol: "BTC", addedAt: Date.now() },
-  { symbol: "ETH", addedAt: Date.now() },
-  { symbol: "SOL", addedAt: Date.now() },
-  { symbol: "LINK", addedAt: Date.now() },
+// Popular tokens for quick selection
+export const POPULAR_TOKENS: SwapToken[] = [
+  {
+    address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    symbol: "WETH",
+    name: "Wrapped Ether",
+    decimals: 18,
+  },
+  {
+    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    symbol: "USDC",
+    name: "USD Coin",
+    decimals: 6,
+  },
+  {
+    address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    symbol: "USDT",
+    name: "Tether USD",
+    decimals: 6,
+  },
+  {
+    address: "0x2260FAC8A66351360556866AB5Bb8b724513Ba0d",
+    symbol: "WBTC",
+    name: "Wrapped Bitcoin",
+    decimals: 8,
+  },
+  {
+    address: "0x514910ffD3D7D764F1196a3DBA4f5c4a3supp776",
+    symbol: "LINK",
+    name: "ChainLink",
+    decimals: 18,
+  },
 ];
