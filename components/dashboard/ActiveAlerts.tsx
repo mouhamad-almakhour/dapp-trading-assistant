@@ -12,8 +12,8 @@ interface ActiveAlertsProps {
   gas: GasPriceData | null;
 }
 
-export function ActiveAlerts(gas: ActiveAlertsProps) {
-  const { activeAlerts, loading } = useAlerts(gas.gas);
+export function ActiveAlerts({ gas }: ActiveAlertsProps) {
+  const { activeAlerts, loading } = useAlerts(gas);
 
   return (
     <Card className="trading-card h-full">

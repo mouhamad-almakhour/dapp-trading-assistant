@@ -11,10 +11,8 @@ interface GasMiniWidgetProps {
   gas: GasPriceData | null;
 }
 
-export function GasMiniWidget(gas: GasMiniWidgetProps) {
-  const gasLevel = gas
-    ? calculateGasLevel(Number(gas.gas?.standard))
-    : "medium";
+export function GasMiniWidget({ gas }: GasMiniWidgetProps) {
+  const gasLevel = gas ? calculateGasLevel(Number(gas?.standard)) : "medium";
   const levelStyle = GAS_LEVEL_STYLES[gasLevel];
 
   return (
@@ -55,7 +53,7 @@ export function GasMiniWidget(gas: GasMiniWidgetProps) {
                 {type}
               </p>
               <p className={cn("text-lg font-bold", GAS_TYPE_STYLES[type])}>
-                {gas?.gas ? gas.gas[type] : "—"}
+                {gas ? gas[type] : "—"}
               </p>
               <p className="text-xs text-muted-foreground">gwei</p>
             </div>

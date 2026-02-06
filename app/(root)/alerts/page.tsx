@@ -8,18 +8,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Loader2 } from "lucide-react";
 
 export default function AlertsPage() {
   const { alerts, addAlert, removeAlert, loading, error } = useAlerts(null);
   const [threshold, setThreshold] = useState("");
   const [condition, setCondition] = useState<"below" | "above">("below");
 
-  const handleAddAlert = () => {
+  const handleAddAlert = async () => {
     const value = parseFloat(threshold);
     if (isNaN(value) || value <= 0) return;
-    addAlert(value, condition);
-    setThreshold("");
+    try {
+      addAlert(value, condition);
+      setThreshold("");
+    } catch {}
   };
 
   return (
@@ -64,8 +66,13 @@ export default function AlertsPage() {
             </RadioGroup>
           </div>
 
+          {/* Submit */}
           <Button onClick={handleAddAlert} className="w-full">
-            <Plus className="h-4 w-4 mr-2" />
+            {loading ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Plus className="h-4 w-4 mr-2"></Plus>
+            )}
             Add Alert
           </Button>
         </CardContent>
@@ -105,7 +112,7 @@ export default function AlertsPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => removeAlert(alert.id)}
+                    onClick={() => removeAlert(alert.id).catch(() => {})}
                   >
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>

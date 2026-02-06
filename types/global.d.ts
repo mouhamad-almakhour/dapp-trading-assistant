@@ -268,7 +268,7 @@ declare global {
     triggered: boolean;
     createdAt: number;
     lastTriggeredAt: number | null;
-    updatedAt: number;
+    updatedAt: Date;
   }
   interface UseAlertsReturn {
     alerts: Alert[];
@@ -293,16 +293,11 @@ declare global {
   interface Activity {
     id: string;
     userId: string;
-    type:
-      | "swap"
-      | "alert_triggered"
-      | "alert_created"
-      | "alert_deleted"
-      | "watchlist_added";
+    type: ActivityType;
     message: string;
     details: string | null;
     metadata?: Record<string, string | number | boolean>;
-    createdAt: number;
+    createdAt: Date;
   }
 
   interface UseActivityReturn {

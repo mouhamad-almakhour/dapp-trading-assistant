@@ -1,4 +1,3 @@
-// hooks/useActivities.ts
 import { useState, useEffect } from "react";
 
 export function useActivities(limit = 10): UseActivityReturn {

@@ -2,6 +2,7 @@
 import { Activity } from "@/database/models/activity.model";
 import { connectToDatabase } from "@/database/mongoose";
 import { auth } from "@/lib/better-auth/auth";
+import { ACTIVITY_TYPES } from "@/lib/constants";
 import { toActivity } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,7 +18,9 @@ export async function GET(req: NextRequest) {
     await connectToDatabase();
 
     const { searchParams } = new URL(req.url);
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const rawLimit = parseInt(searchParams.get("limit") || "10", 10);
+    const limit =
+      Number.isFinite(rawLimit) && rawLimit > 0 ? Math.min(rawLimit, 100) : 10;
     const type = searchParams.get("type");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,6 +58,13 @@ export async function POST(req: NextRequest) {
     if (!type || !message) {
       return NextResponse.json(
         { error: "Missing required fields" },
+        { status: 400 },
+      );
+    }
+
+    if (!ACTIVITY_TYPES.includes(type)) {
+      return NextResponse.json(
+        { error: "Invalid activity type" },
         { status: 400 },
       );
     }

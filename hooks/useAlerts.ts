@@ -62,6 +62,8 @@ export function useAlerts(gas: GasPriceData | null): UseAlertsReturn {
 
   const addAlert = useCallback(
     async (threshold: number, condition: "below" | "above") => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await fetch("/api/alerts", {
           method: "POST",
@@ -76,12 +78,17 @@ export function useAlerts(gas: GasPriceData | null): UseAlertsReturn {
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to add alert");
         throw err;
+      } finally {
+        setLoading(false);
       }
     },
     [],
   );
 
   const removeAlert = useCallback(async (id: string) => {
+    setLoading(true);
+    setError(null);
+
     try {
       const response = await fetch(`/api/alerts/${id}`, {
         method: "DELETE",
@@ -93,11 +100,16 @@ export function useAlerts(gas: GasPriceData | null): UseAlertsReturn {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to remove alert");
       throw err;
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const toggleAlert = useCallback(async (id: string, active: boolean) => {
+    setLoading(true);
+    setError(null);
     try {
+      setLoading(true);
       const response = await fetch(`/api/alerts/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -111,6 +123,8 @@ export function useAlerts(gas: GasPriceData | null): UseAlertsReturn {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to toggle alert");
       throw err;
+    } finally {
+      setLoading(false);
     }
   }, []);
 

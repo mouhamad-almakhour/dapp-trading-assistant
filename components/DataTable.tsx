@@ -10,15 +10,13 @@ import { cn } from "@/lib/utils";
 
 const DataTable = <T,>({ columns, data, rowKey }: DataTableProps<T>) => {
   return (
-    <Table className={cn("custom-scrollbar")}>
+    <Table className="custom-scrollbar">
       <TableHeader>
-        <TableRow className={cn("hover:bg-transparent!")}>
+        <TableRow className="hover:bg-transparent!">
           {columns.map((column, i) => (
             <TableHead
               key={i}
-              className={cn(
-                "bg-dark-400 text-purple-100 py-4 first:pl-5 last:pr-5",
-              )}
+              className="bg-dark-400 text-purple-100 py-4 first:pl-5 last:pr-5"
             >
               {column.header}
             </TableHead>
@@ -29,14 +27,12 @@ const DataTable = <T,>({ columns, data, rowKey }: DataTableProps<T>) => {
         {data.map((row, rowIndex) => (
           <TableRow
             key={rowKey(row, rowIndex)}
-            className={cn(
-              "overflow-hidden rounded-lg border-b border-purple-100/5 hover:bg-dark-400/30! relative",
-            )}
+            className="overflow-hidden rounded-lg border-b border-purple-100/5 hover:bg-dark-400/30! relative"
           >
             {columns.map((column, columnIndex) => (
               <TableCell
                 key={columnIndex}
-                className={cn("py-4 first:pl-5 last:pr-5")}
+                className="py-4 first:pl-5 last:pr-5"
               >
                 {column.cell(row, rowIndex)}
               </TableCell>

@@ -44,7 +44,14 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { threshold, condition, type = "gas" } = body;
 
-    if (!threshold || !condition) {
+    if (!["gas"].includes(type)) {
+      return NextResponse.json(
+        { error: "Invalid alert type" },
+        { status: 400 },
+      );
+    }
+
+    if (threshold === undefined || threshold === null || !condition) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 },

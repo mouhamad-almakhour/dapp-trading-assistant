@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { RefreshCw, Bell, Eye, BellOff } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useActivities } from "@/hooks/useActivity";
+import { useActivities } from "@/hooks/useActivities";
 
 const ACTIVITY_STYLES: Record<
   ActivityType,

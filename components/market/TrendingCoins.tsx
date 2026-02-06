@@ -7,10 +7,10 @@ import DataTable from "@/components/DataTable";
 import { TrendingCoinsFallback } from "./fallback";
 
 const TrendingCoins = async () => {
-  let tradinglist;
+  let tradinglist: TrendingCoin[] = [];
 
   try {
-    tradinglist = await getTrendingCoins();
+    tradinglist = (await getTrendingCoins()) ?? [];
   } catch (error) {
     console.error("Error fetching trending coins:", error);
     return <TrendingCoinsFallback />;
@@ -66,7 +66,7 @@ const TrendingCoins = async () => {
       <h4>Trending Coins</h4>
 
       <DataTable
-        data={tradinglist.slice(0, 6) || []}
+        data={tradinglist.slice(0, 6)}
         columns={columns}
         rowKey={(coin) => coin.item.id}
       />

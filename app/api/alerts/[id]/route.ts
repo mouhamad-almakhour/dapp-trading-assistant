@@ -9,10 +9,10 @@ import { NextRequest, NextResponse } from "next/server";
 // PATCH update alert (toggle active, update triggered status)
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  const { id } = await params;
   try {
+    const { id } = await params;
     const session = await auth.api.getSession({ headers: req.headers });
 
     if (!session?.user?.id) {
@@ -78,10 +78,10 @@ export async function PATCH(
 // DELETE alert
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  const { id } = await params;
   try {
+    const { id } = await params;
     const session = await auth.api.getSession({ headers: req.headers });
 
     if (!session?.user?.id) {

@@ -1,4 +1,3 @@
-// lib/db/models/alert.model.ts
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IAlert extends Document {

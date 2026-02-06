@@ -3,7 +3,12 @@ import { GasMiniWidget } from "@/components/dashboard/GasMiniWidget";
 import { getGasPrice } from "@/lib/actions/coingecko.actions";
 
 const GasTracker = async () => {
-  const gas = await getGasPrice();
+  let gas: GasPriceData | null = null;
+  try {
+    gas = await getGasPrice();
+  } catch (e) {
+    console.error("Failed to fetch gas price:", e);
+  }
 
   return (
     <div className="space-y-6">

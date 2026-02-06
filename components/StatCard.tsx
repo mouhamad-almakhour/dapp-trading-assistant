@@ -13,7 +13,7 @@ export function StatCard({
 
   return (
     <Card className="stats-card">
-      <CardContent className="p-4 py-0.5">
+      <CardContent className="px-4 py-0.5">
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs text-muted-foreground uppercase tracking-wide">
             {title}

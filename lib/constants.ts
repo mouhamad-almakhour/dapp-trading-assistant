@@ -346,6 +346,14 @@ export const GAS_TYPE_STYLES: Record<string, string> = {
   fast: "text-red-600 dark:text-red-400",
 };
 
+export const ACTIVITY_TYPES = [
+  "swap",
+  "alert_triggered",
+  "alert_created",
+  "alert_deleted",
+  "watchlist_added",
+] as const;
+
 export const COIN_IDS: Record<string, string> = {
   BTC: "bitcoin",
   ETH: "ethereum",
@@ -387,7 +395,7 @@ export const POPULAR_TOKENS: SwapToken[] = [
     decimals: 8,
   },
   {
-    address: "0x514910ffD3D7D764F1196a3DBA4f5c4a3supp776",
+    address: "0x514910771af9ca656af840dff83e8264ecf986ca",
     symbol: "LINK",
     name: "ChainLink",
     decimals: 18,

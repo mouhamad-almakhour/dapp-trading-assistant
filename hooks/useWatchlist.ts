@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { COIN_IDS } from "@/lib/constants";
 import { getSimplePrice } from "@/lib/actions/coingecko.actions";
 
@@ -27,25 +27,31 @@ export function useWatchlist(defaultTokens: string[] = []): UseWatchlistReturn {
     fetchPrices();
   }, [tokens]);
 
-  const watchlist: WatchlistItem[] = tokens.flatMap((token) => {
-    const id = COIN_IDS[token.symbol.toUpperCase()];
-    if (!id) return [];
-    const priceData = pricesMap[id];
-    if (!priceData) return [];
+  const watchlist: WatchlistItem[] = useMemo(
+    () =>
+      tokens.flatMap((token) => {
+        const id = COIN_IDS[token.symbol.toUpperCase()];
+        if (!id) return [];
+        const priceData = pricesMap[id];
+        if (!priceData) return [];
 
-    return [
-      {
-        id,
-        symbol: token.symbol.toUpperCase(),
-        name: id.replace("-", " "), // simple fallback, or keep a separate name map
-        price: priceData.usd,
-        change24h: priceData.usd_24h_change,
-        volume24h: priceData.usd_24h_vol,
-        marketCap: priceData.usd_market_cap,
-        addedAt: token.addedAt,
-      },
-    ];
-  });
+        return [
+          {
+            id,
+            symbol: token.symbol.toUpperCase(),
+            name: id
+              .replaceAll("-", " ")
+              .replace(/\b\w/g, (c) => c.toUpperCase()), // simple fallback, or keep a separate name map
+            price: priceData.usd,
+            change24h: priceData.usd_24h_change,
+            volume24h: priceData.usd_24h_vol,
+            marketCap: priceData.usd_market_cap,
+            addedAt: token.addedAt,
+          },
+        ];
+      }),
+    [tokens, pricesMap],
+  );
 
   const addToken = useCallback((symbol: string) => {
     const upper = symbol.toUpperCase();

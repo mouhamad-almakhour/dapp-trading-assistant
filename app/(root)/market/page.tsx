@@ -1,12 +1,10 @@
 import TickerTape from "@/components/alert/TickerTape";
 import TradingViewWidget from "@/components/alert/TradingViewWidget";
 import {
-  COIN_TECHNICAL_ANALYSIS_WIDGET_CONFIG,
   DEFAULT_TICKER_TAPE_SYMBOLS,
   HEATMAP_WIDGET_CONFIG,
   MARKET_CRYPTO_WIDGET_CONFIG,
   MARKET_OVERVIEW_WIDGET_CONFIG,
-  SYMBOL_INFO_WIDGET_CONFIG,
   TOP_STORIES_WIDGET_CONFIG,
 } from "@/lib/constants";
 const Market = () => {

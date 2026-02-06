@@ -5,11 +5,11 @@ import { COIN_IDS } from "../constants";
 
 const BASE_URL = process.env.COINGECKO_BASE_URL;
 const COINGECKO_API_KEY = process.env.COINGECKO_API_KEY;
-const ETHERSACN_API_KEY = process.env.ETHERSACN_API_KEY;
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
 if (!BASE_URL) throw new Error("Could not get base url");
 if (!COINGECKO_API_KEY) throw new Error("Could not get api key");
-if (!ETHERSACN_API_KEY) throw new Error("Could not get api key");
+if (!ETHERSCAN_API_KEY) throw new Error("Could not get api key");
 
 export async function fetcher<T>(
   endpoint: string,
@@ -48,7 +48,7 @@ export async function fetcher<T>(
 async function fetchGasOracle(apiKey: string) {
   const url = `https://api.etherscan.io/v2/api?chainid=1&module=gastracker&action=gasoracle&apikey=${apiKey}`;
 
-  const res = await fetch(url);
+  const res = await fetch(url, { next: { revalidate: 300 } });
 
   if (!res.ok) {
     throw new Error(`Etherscan error: ${res.status}`);
@@ -64,12 +64,16 @@ async function fetchGasOracle(apiKey: string) {
 }
 
 export async function getGasPrice() {
-  const gas = await fetchGasOracle(ETHERSACN_API_KEY!);
+  const gas = await fetchGasOracle(ETHERSCAN_API_KEY!);
+
+  const slow = Number(gas.SafeGasPrice);
   const standard = Number(gas.ProposeGasPrice);
+  const fast = Number(gas.FastGasPrice);
+
   const data: GasPriceData = {
-    slow: Number(gas.SafeGasPrice),
+    slow,
     standard,
-    fast: Number(gas.FastGasPrice),
+    fast,
     updatedAt: Date.now(),
   };
   return data;
@@ -81,8 +85,6 @@ export async function getGasPrice() {
 export async function getCoinId(symbol: string): Promise<string | undefined> {
   return COIN_IDS[symbol.toUpperCase()];
 }
-
-// Helper: multiple symbols → coingecko ids string
 
 // Helper: multiple symbols → coingecko ids string "bitcoin,ethereum"
 export async function getCoinIdsCSV(_symbols: string[]): Promise<string> {
