@@ -1,9 +1,10 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useActivity } from "@/hooks/useActivity";
-import { RefreshCw, Bell, Eye } from "lucide-react";
+
+import { RefreshCw, Bell, Eye, BellOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useActivities } from "@/hooks/useActivity";
 
 const ACTIVITY_STYLES: Record<
   ActivityType,
@@ -24,6 +25,11 @@ const ACTIVITY_STYLES: Record<
     bg: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
     label: "Alert",
   },
+  alert_deleted: {
+    icon: <BellOff className="h-3.5 w-3.5" />,
+    bg: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+    label: "Alert",
+  },
   watchlist_added: {
     icon: <Eye className="h-3.5 w-3.5" />,
     bg: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
@@ -32,8 +38,35 @@ const ACTIVITY_STYLES: Record<
 };
 
 export function RecentActivity() {
-  const { activities } = useActivity();
-  const recent = activities.slice(0, 5);
+  const { activities, loading, error } = useActivities(5);
+
+  if (loading) {
+    return (
+      <Card className="trading-card h-full">
+        <CardHeader>
+          <CardTitle>Recent Activity</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-32">
+            <div className="spinner h-5 w-5" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="trading-card h-full">
+        <CardHeader>
+          <CardTitle>Recent Activity</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-red-500">{error}</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="trading-card h-full">
@@ -43,14 +76,14 @@ export function RecentActivity() {
 
       <CardContent>
         <div className="space-y-0">
-          {recent.map((activity, i) => {
+          {activities.map((activity, i) => {
             const style = ACTIVITY_STYLES[activity.type];
             return (
               <div
                 key={activity.id}
                 className={cn(
                   "flex items-start gap-3 py-2.5 px-1",
-                  i !== recent.length - 1 && "border-b border-border",
+                  i !== activities.length - 1 && "border-b border-border",
                 )}
               >
                 {/* Icon */}
@@ -90,7 +123,7 @@ export function RecentActivity() {
             );
           })}
 
-          {recent.length === 0 && (
+          {activities.length === 0 && (
             <p className="text-xs text-muted-foreground text-center py-6">
               No recent activity yet.
             </p>

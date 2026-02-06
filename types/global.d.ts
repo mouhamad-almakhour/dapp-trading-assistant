@@ -260,46 +260,55 @@ declare global {
 
   interface Alert {
     id: string;
-    type: "gas";
+    userId: string;
+    type: "gas" | "price";
     condition: "below" | "above";
     threshold: number;
     active: boolean;
     triggered: boolean;
     createdAt: number;
     lastTriggeredAt: number | null;
+    updatedAt: number;
   }
   interface UseAlertsReturn {
     alerts: Alert[];
     activeAlerts: Alert[];
     loading: boolean;
     error: string | null;
-    addAlert: (threshold: number, condition: "below" | "above") => void;
-    removeAlert: (id: string) => void;
-    toggleAlert: (id: string) => void;
+    addAlert: (
+      threshold: number,
+      condition: "below" | "above",
+    ) => Promise<void>;
+    removeAlert: (id: string) => Promise<void>;
+    toggleAlert: (id: string, active: boolean) => Promise<void>;
   }
 
   type ActivityType =
     | "swap"
     | "alert_triggered"
     | "alert_created"
+    | "alert_deleted"
     | "watchlist_added";
 
   interface Activity {
     id: string;
-    type: ActivityType;
+    userId: string;
+    type:
+      | "swap"
+      | "alert_triggered"
+      | "alert_created"
+      | "alert_deleted"
+      | "watchlist_added";
     message: string;
-    details?: string;
+    details: string | null;
+    metadata?: Record<string, string | number | boolean>;
     createdAt: number;
   }
 
   interface UseActivityReturn {
     activities: Activity[];
-    addActivity: (
-      type: ActivityType,
-      message: string,
-      details?: string,
-    ) => void;
-    clearActivities: () => void;
+    loading: boolean;
+    error: string | null;
   }
 
   interface DataTableColumn<T> {

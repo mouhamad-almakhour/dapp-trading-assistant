@@ -1,33 +1,120 @@
-import Categories from "@/components/market/Categories";
-import CoinOverview from "@/components/market/CoinOverview";
-import {
-  CategoriesFallback,
-  CoinOverviewFallback,
-  TrendingCoinsFallback,
-} from "@/components/market/fallback";
-import TrendingCoins from "@/components/market/TrendingCoins";
-import { Suspense } from "react";
+// app/alerts/page.tsx
+"use client";
 
-const Alerts = () => {
+import { useState } from "react";
+import { useAlerts } from "@/hooks/useAlerts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Trash2, Plus } from "lucide-react";
+
+export default function AlertsPage() {
+  const { alerts, addAlert, removeAlert, loading, error } = useAlerts(null);
+  const [threshold, setThreshold] = useState("");
+  const [condition, setCondition] = useState<"below" | "above">("below");
+
+  const handleAddAlert = () => {
+    const value = parseFloat(threshold);
+    if (isNaN(value) || value <= 0) return;
+    addAlert(value, condition);
+    setThreshold("");
+  };
+
   return (
-    <div>
-      {/* <section className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 items-start lg:items-center gap-6">
-        <Suspense fallback={<CoinOverviewFallback />}>
-          <CoinOverview />
-        </Suspense>
+    <div className="container mx-auto p-6 space-y-6">
+      <h1 className="text-2xl font-bold">Manage Alerts</h1>
 
-        <Suspense fallback={<TrendingCoinsFallback />}>
-          <TrendingCoins />
-        </Suspense>
-      </section>
+      {/* Create Alert */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Create New Alert</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="threshold">Gas Price (gwei)</Label>
+            <Input
+              id="threshold"
+              type="number"
+              placeholder="30"
+              value={threshold}
+              onChange={(e) => setThreshold(e.target.value)}
+            />
+          </div>
 
-      <section className="w-full mt-7 space-y-4">
-        <Suspense fallback={<CategoriesFallback />}>
-          <Categories />
-        </Suspense>
-      </section> */}
+          <div className="space-y-2">
+            <Label>Condition</Label>
+            <RadioGroup
+              value={condition}
+              onValueChange={(v) => setCondition(v as "below" | "above")}
+            >
+              <div className="flex items-center gap-2">
+                <RadioGroupItem value="below" id="below" />
+                <Label htmlFor="below" className="cursor-pointer">
+                  Below threshold
+                </Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <RadioGroupItem value="above" id="above" />
+                <Label htmlFor="above" className="cursor-pointer">
+                  Above threshold
+                </Label>
+              </div>
+            </RadioGroup>
+          </div>
+
+          <Button onClick={handleAddAlert} className="w-full">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Alert
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* All Alerts List */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">All Alerts</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <div className="flex justify-center py-8">
+              <div className="spinner h-6 w-6" />
+            </div>
+          ) : error ? (
+            <p className="text-sm text-red-500">{error}</p>
+          ) : alerts.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-8">
+              No alerts yet. Create one above.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {alerts.map((alert) => (
+                <div
+                  key={alert.id}
+                  className="flex items-center justify-between p-3 border rounded-lg"
+                >
+                  <div>
+                    <p className="text-sm font-medium">
+                      Gas {alert.condition} {alert.threshold} gwei
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Created {new Date(alert.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeAlert(alert.id)}
+                  >
+                    <Trash2 className="h-4 w-4 text-red-500" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
-};
-
-export default Alerts;
+}
