@@ -5,9 +5,10 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useSwap, POPULAR_TOKENS } from "@/hooks/useSwap";
+import { useSwap } from "@/hooks/useSwap";
 import { ArrowDown, ArrowRight, Loader2 } from "lucide-react";
 import { ROUTES } from "@/lib/config/routes";
+import { POPULAR_TOKENS } from "@/lib/constants";
 
 function TokenSelector({
   token,

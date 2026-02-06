@@ -1,10 +1,8 @@
-import { fetcher } from "@/lib/actions/coingecko.actions";
+import { getCoinDetails } from "@/lib/actions/coingecko.actions";
 import { formatCurrency } from "@/lib/utils";
 import Image from "next/image";
 const CoinOverview = async () => {
-  const coin = await fetcher<CoinDetailsData>("coins/bitcoin", {
-    dex_pair_format: "symbol",
-  });
+  const coin = await getCoinDetails("bitcoin");
 
   return (
     <div id="coin-overview">

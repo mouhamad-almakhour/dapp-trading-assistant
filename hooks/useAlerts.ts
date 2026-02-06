@@ -1,93 +1,136 @@
-"use client";
-import { useEffect, useState, useCallback } from "react";
-import { useGasPrice } from "./useGasPrice";
+// hooks/useAlerts.ts
+import { useState, useEffect, useCallback } from "react";
 
-function generateId(): string {
-  return `alert_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
-}
+export function useAlerts(gas: GasPriceData | null): UseAlertsReturn {
+  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export function useAlerts(): UseAlertsReturn {
-  const { gas } = useGasPrice();
-  const [alerts, setAlerts] = useState<Alert[]>([
-    {
-      id: "alert_default_1",
-      type: "gas",
-      condition: "below",
-      threshold: 30,
-      active: true,
-      triggered: false,
-      createdAt: 113434434,
-      lastTriggeredAt: null,
-    },
-    {
-      id: "alert_default_2",
-      type: "gas",
-      condition: "below",
-      threshold: 20,
-      active: true,
-      triggered: false,
-      createdAt: 113434434,
-      lastTriggeredAt: null,
-    },
-  ]);
-  const [loading] = useState(false);
-  const [error] = useState<string | null>(null);
-
-  // Check alerts when gas price changes
+  // Fetch alerts on mount
   useEffect(() => {
-    if (!gas) return;
+    async function fetchAlerts() {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/alerts");
+        if (!response.ok) throw new Error("Failed to fetch alerts");
+        const data = await response.json();
+        setAlerts(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load alerts");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchAlerts();
+  }, []);
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setAlerts((prev) =>
-      prev.map((alert) => {
-        if (!alert.active || alert.type !== "gas") return alert;
+  // Check gas prices against alerts
+  useEffect(() => {
+    if (!gas || alerts.length === 0) return;
 
-        const triggered =
-          alert.condition === "below"
-            ? gas.standard <= alert.threshold
-            : gas.standard >= alert.threshold;
+    alerts.forEach(async (alert) => {
+      if (!alert.active || alert.type !== "gas") return;
 
-        return {
-          ...alert,
-          triggered,
-          lastTriggeredAt: triggered ? Date.now() : alert.lastTriggeredAt,
-        };
-      }),
-    );
-  }, [gas]);
+      const triggered =
+        alert.condition === "below"
+          ? gas.standard <= alert.threshold
+          : gas.standard >= alert.threshold;
+
+      if (triggered && !alert.triggered) {
+        try {
+          const response = await fetch(`/api/alerts/${alert.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              triggered: true,
+              lastTriggeredAt: Date.now(),
+            }),
+          });
+
+          if (response.ok) {
+            const updated = await response.json();
+            setAlerts((prev) =>
+              prev.map((a) => (a.id === alert.id ? updated : a)),
+            );
+          }
+        } catch (err) {
+          console.error("Failed to update alert:", err);
+        }
+      }
+    });
+  }, [gas, alerts]);
 
   const addAlert = useCallback(
-    (threshold: number, condition: "below" | "above") => {
-      const newAlert: Alert = {
-        id: generateId(),
-        type: "gas",
-        condition,
-        threshold,
-        active: true,
-        triggered: false,
-        createdAt: Date.now(),
-        lastTriggeredAt: null,
-      };
-      setAlerts((prev) => [...prev, newAlert]);
+    async (threshold: number, condition: "below" | "above") => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch("/api/alerts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ threshold, condition, type: "gas" }),
+        });
+
+        if (!response.ok) throw new Error("Failed to add alert");
+
+        const newAlert = await response.json();
+        setAlerts((prev) => [newAlert, ...prev]);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to add alert");
+        throw err;
+      } finally {
+        setLoading(false);
+      }
     },
     [],
   );
 
-  const removeAlert = useCallback((id: string) => {
-    setAlerts((prev) => prev.filter((a) => a.id !== id));
+  const removeAlert = useCallback(async (id: string) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/alerts/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) throw new Error("Failed to remove alert");
+
+      setAlerts((prev) => prev.filter((a) => a.id !== id));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to remove alert");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const toggleAlert = useCallback((id: string) => {
-    setAlerts((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, active: !a.active } : a)),
-    );
-  }, []);
+  const toggleAlert = useCallback(async (id: string, active: boolean) => {
+    setLoading(true);
+    setError(null);
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/alerts/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active }),
+      });
 
-  const activeAlerts = alerts.filter((a) => a.active);
+      if (!response.ok) throw new Error("Failed to toggle alert");
+
+      const updated = await response.json();
+      setAlerts((prev) => prev.map((a) => (a.id === id ? updated : a)));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to toggle alert");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   return {
     alerts,
-    activeAlerts,
+    activeAlerts: alerts.filter((a) => a.active),
     loading,
     error,
     addAlert,

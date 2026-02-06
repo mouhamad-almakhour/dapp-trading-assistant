@@ -23,6 +23,11 @@ declare global {
   interface CoinGeckoErrorBody {
     error?: string;
   }
+  type StockDetailsProps = {
+    params: Promise<{
+      id: string;
+    }>;
+  };
 
   type FormInputProps = {
     name: string;
@@ -184,11 +189,8 @@ declare global {
   }
 
   interface TrendingResponse {
-    coins: {
-      item: TrendingCoin;
-    }[];
+    coins: TrendingCoin[];
   }
-
   interface TrendingCoin {
     item: {
       id: string;
@@ -230,7 +232,10 @@ declare global {
   interface SimplePriceResponse {
     [coinId: string]: {
       usd: number;
+      usd_market_cap: number;
+      usd_24h_vol: number;
       usd_24h_change?: number;
+      last_updated_at: number;
     };
   }
 
@@ -242,12 +247,8 @@ declare global {
     volume24h: number;
     marketCap: number;
   }
-
-  interface UseCryptoPricesReturn {
-    prices: Record<string, CryptoPrice>;
-    loading: boolean;
-    error: string | null;
-    refetch: () => void;
+  interface SupportedCurrency {
+    symbol: string;
   }
 
   interface StatsBarItem {
@@ -257,79 +258,62 @@ declare global {
     icon?: string;
   }
 
-  interface GasData {
-    slow: number;
-    standard: number;
-    fast: number;
-    level: "low" | "medium" | "high";
-  }
-  interface WatchlistItem {
-    id: string;
-    symbol: string;
-    name: string;
-    price: number;
-    change24h: number;
-  }
   interface Alert {
     id: string;
-    type: "gas";
+    userId: string;
+    type: "gas" | "price";
     condition: "below" | "above";
     threshold: number;
     active: boolean;
     triggered: boolean;
     createdAt: number;
     lastTriggeredAt: number | null;
+    updatedAt: Date;
   }
   interface UseAlertsReturn {
     alerts: Alert[];
     activeAlerts: Alert[];
     loading: boolean;
     error: string | null;
-    addAlert: (threshold: number, condition: "below" | "above") => void;
-    removeAlert: (id: string) => void;
-    toggleAlert: (id: string) => void;
+    addAlert: (
+      threshold: number,
+      condition: "below" | "above",
+    ) => Promise<void>;
+    removeAlert: (id: string) => Promise<void>;
+    toggleAlert: (id: string, active: boolean) => Promise<void>;
   }
 
   type ActivityType =
     | "swap"
     | "alert_triggered"
     | "alert_created"
+    | "alert_deleted"
     | "watchlist_added";
 
   interface Activity {
     id: string;
+    userId: string;
     type: ActivityType;
     message: string;
-    details?: string;
-    createdAt: number;
+    details: string | null;
+    metadata?: Record<string, string | number | boolean>;
+    createdAt: Date;
   }
 
   interface UseActivityReturn {
     activities: Activity[];
-    addActivity: (
-      type: ActivityType,
-      message: string,
-      details?: string,
-    ) => void;
-    clearActivities: () => void;
+    loading: boolean;
+    error: string | null;
   }
 
   interface DataTableColumn<T> {
     header: React.ReactNode;
     cell: (row: T, index: number) => React.ReactNode;
-    headClassName?: string;
-    cellClassName?: string;
   }
   interface DataTableProps<T> {
     columns: DataTableColumn<T>[];
     data: T[];
     rowKey: (row: T, index: number) => React.Key;
-    tableClassName?: string;
-    headerClassName?: string;
-    headerRowClassName?: string;
-    headerCellClassName?: string;
-    bodyRowClassName?: string;
-    bodyCellClassName?: string;
   }
 
   interface Category {
@@ -343,19 +327,10 @@ declare global {
     slow: number;
     standard: number;
     fast: number;
-    level: number;
     updatedAt: number;
   }
 
-  type GasLevel = "low" | "medium" | "high";
-
-  interface UseGasPriceReturn {
-    gas: GasPriceData | null;
-    gasLevel: GasLevel;
-    loading: boolean;
-    error: string | null;
-    refetch: () => void;
-  }
+  type GasValueKey = Exclude<keyof GasPriceData, "updatedAt">;
 
   interface GlobalMarket {
     data: {
@@ -378,8 +353,8 @@ declare global {
   }
 
   interface UseWatchlistReturn {
+    tokens: WatchlistToken[];
     watchlist: WatchlistItem[];
-    loading: boolean;
     addToken: (symbol: string) => void;
     removeToken: (symbol: string) => void;
     isWatched: (symbol: string) => boolean;
@@ -391,6 +366,38 @@ declare global {
     change?: number;
     icon: React.ReactNode;
     suffix?: string;
+    href?: string;
+  }
+
+  interface SwapToken {
+    address: string;
+    symbol: string;
+    name: string;
+    decimals: number;
+  }
+
+  interface SwapResult {
+    inputToken: SwapToken;
+    outputToken: SwapToken;
+    inputAmount: string;
+    outputAmount: string;
+    priceImpact: number;
+    estimatedGas: number;
+  }
+  interface UseSwapReturn {
+    inputToken: SwapToken | null;
+    outputToken: SwapToken | null;
+    inputAmount: string;
+    outputAmount: string;
+    result: SwapResult | null;
+    loading: boolean;
+    error: string | null;
+    setInputToken: (token: SwapToken) => void;
+    setOutputToken: (token: SwapToken) => void;
+    setInputAmount: (amount: string) => void;
+    swapTokens: () => void;
+    calculate: () => Promise<void>;
+    reset: () => void;
   }
 }
 export {};

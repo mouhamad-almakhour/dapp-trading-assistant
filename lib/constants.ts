@@ -25,13 +25,6 @@ export const FEATURES: Feature[] = [
     image: "/images/ai-summaries.png",
   },
 ];
-const COINGECKO_IDS: Record<string, string> = {
-  BTC: "bitcoin",
-  ETH: "ethereum",
-  SOL: "solana",
-  LINK: "chainlink",
-  USDC: "usd-coin",
-};
 
 export const NAV_ITEMS = [{ href: "/search", label: "Search" }];
 
@@ -54,33 +47,6 @@ export const COIN_TECHNICAL_ANALYSIS_WIDGET_CONFIG = (symbol: string) => ({
   interval: "1h",
   largeChartUrl: "",
   showIntervalTabs: true,
-});
-
-export const COIN_CHART_WIDGET_CONFIG = (symbol: string) => ({
-  allow_symbol_change: false,
-  colorTheme: "dark",
-  calendar: false,
-  details: true,
-  hide_side_toolbar: true,
-  hide_top_toolbar: false,
-  hide_legend: false,
-  hide_volume: false,
-  hotlist: false,
-  interval: "D",
-  locale: "en",
-  save_image: false,
-  style: 1,
-  symbol: symbol.toUpperCase(),
-  theme: "dark",
-  timezone: "Etc/UTC",
-  backgroundColor: "#141414",
-  gridColor: "#141414",
-  watchlist: [],
-  withdateranges: false,
-  compareSymbols: [],
-  studies: [],
-  width: "100%",
-  height: 600,
 });
 
 export const COIN_FINANCIALS_WIDGET_CONFIG = (symbol: string) => ({
@@ -372,13 +338,21 @@ export const GAS_LEVEL_STYLES = {
   },
 } as const;
 
-export const GAS_TYPES = ["slow", "standard", "fast"] as const;
+export const GAS_TYPES: GasValueKey[] = ["slow", "standard", "fast"];
 
 export const GAS_TYPE_STYLES: Record<string, string> = {
   slow: "text-green-600 dark:text-green-400",
   standard: "text-yellow-600 dark:text-yellow-400",
   fast: "text-red-600 dark:text-red-400",
 };
+
+export const ACTIVITY_TYPES = [
+  "swap",
+  "alert_triggered",
+  "alert_created",
+  "alert_deleted",
+  "watchlist_added",
+] as const;
 
 export const COIN_IDS: Record<string, string> = {
   BTC: "bitcoin",
@@ -391,14 +365,65 @@ export const COIN_IDS: Record<string, string> = {
   ADA: "cardano",
   DOT: "polkadot",
   AVAX: "avalanche-2",
-  MATIC: "matic-network",
   UNI: "uniswap",
 };
 
-// Default tokens in watchlist
-export const DEFAULT_WATCHLIST: WatchlistToken[] = [
-  { symbol: "BTC", addedAt: Date.now() },
-  { symbol: "ETH", addedAt: Date.now() },
-  { symbol: "SOL", addedAt: Date.now() },
-  { symbol: "LINK", addedAt: Date.now() },
+// Popular tokens for quick selection
+export const POPULAR_TOKENS: SwapToken[] = [
+  {
+    address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    symbol: "WETH",
+    name: "Wrapped Ether",
+    decimals: 18,
+  },
+  {
+    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    symbol: "USDC",
+    name: "USD Coin",
+    decimals: 6,
+  },
+  {
+    address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    symbol: "USDT",
+    name: "Tether USD",
+    decimals: 6,
+  },
+  {
+    address: "0x2260FAC8A66351360556866AB5Bb8b724513Ba0d",
+    symbol: "WBTC",
+    name: "Wrapped Bitcoin",
+    decimals: 8,
+  },
+  {
+    address: "0x514910771af9ca656af840dff83e8264ecf986ca",
+    symbol: "LINK",
+    name: "ChainLink",
+    decimals: 18,
+  },
 ];
+
+export const COIN_CHART_WIDGET_CONFIG = (symbol: string) => ({
+  allow_symbol_change: false,
+  calendar: false,
+  details: false,
+  hide_side_toolbar: true,
+  hide_top_toolbar: false,
+  hide_legend: false,
+  hide_volume: false,
+  hotlist: false,
+  interval: "D",
+  locale: "en",
+  save_image: false,
+  style: 10,
+  symbol: symbol.toUpperCase(),
+  theme: "dark",
+  timezone: "Etc/UTC",
+  backgroundColor: "#141414",
+  gridColor: "#141414",
+  watchlist: [],
+  withdateranges: false,
+  compareSymbols: [],
+  studies: [],
+  width: "100%",
+  height: 600,
+});

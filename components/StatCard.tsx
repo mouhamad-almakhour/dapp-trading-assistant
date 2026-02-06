@@ -12,13 +12,13 @@ export function StatCard({
   const isPositive = change !== undefined && change >= 0;
 
   return (
-    <Card className="trading-card">
-      <CardContent className="p-4">
+    <Card className="stats-card">
+      <CardContent className="px-4 py-0.5">
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs text-muted-foreground uppercase tracking-wide">
             {title}
           </span>
-          <div className="text-muted-foreground">{icon}</div>
+          <div>{icon}</div>
         </div>
 
         <div className="flex items-end gap-2">

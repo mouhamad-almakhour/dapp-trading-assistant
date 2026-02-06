@@ -46,3 +46,41 @@ export function trendingClasses(value: number) {
     iconClass: isTrendingUp ? "icon-up" : "icon-down",
   };
 }
+
+export const calculateGasLevel = (
+  standard: number,
+): "low" | "medium" | "high" => {
+  if (standard <= 15) return "low";
+  if (standard <= 40) return "medium";
+  return "high";
+};
+
+// Helper to convert Mongoose doc to plain object
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function toAlert(doc: any): Alert {
+  return {
+    id: doc._id.toString(),
+    userId: doc.userId,
+    type: doc.type,
+    condition: doc.condition,
+    threshold: doc.threshold,
+    active: doc.active,
+    triggered: doc.triggered,
+    createdAt: doc.createdAt,
+    lastTriggeredAt: doc.lastTriggeredAt,
+    updatedAt: doc.updatedAt,
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function toActivity(doc: any): Activity {
+  return {
+    id: doc._id.toString(),
+    userId: doc.userId,
+    type: doc.type,
+    message: doc.message,
+    details: doc.details,
+    metadata: doc.metadata,
+    createdAt: doc.createdAt,
+  };
+}

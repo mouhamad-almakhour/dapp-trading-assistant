@@ -4,10 +4,12 @@ import qs from "query-string";
 import { COIN_IDS } from "../constants";
 
 const BASE_URL = process.env.COINGECKO_BASE_URL;
-const API_KEY = process.env.COINGECKO_API_KEY;
+const COINGECKO_API_KEY = process.env.COINGECKO_API_KEY;
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
 if (!BASE_URL) throw new Error("Could not get base url");
-if (!API_KEY) throw new Error("Could not get api key");
+if (!COINGECKO_API_KEY) throw new Error("Could not get api key");
+if (!ETHERSCAN_API_KEY) throw new Error("Could not get api key");
 
 export async function fetcher<T>(
   endpoint: string,
@@ -24,7 +26,7 @@ export async function fetcher<T>(
 
   const response = await fetch(url, {
     headers: {
-      "x-cg-demo-api-key": API_KEY,
+      "x-cg-demo-api-key": COINGECKO_API_KEY,
       "Content-Type": "application/json",
     } as Record<string, string>,
     next: { revalidate },
@@ -43,14 +45,46 @@ export async function fetcher<T>(
   return response.json();
 }
 
+async function fetchGasOracle(apiKey: string) {
+  const url = `https://api.etherscan.io/v2/api?chainid=1&module=gastracker&action=gasoracle&apikey=${apiKey}`;
+
+  const res = await fetch(url, { next: { revalidate: 300 } });
+
+  if (!res.ok) {
+    throw new Error(`Etherscan error: ${res.status}`);
+  }
+
+  const data = await res.json();
+
+  if (data.status !== "1") {
+    throw new Error(`Etherscan API error: ${data.message}`);
+  }
+
+  return data.result;
+}
+
+export async function getGasPrice() {
+  const gas = await fetchGasOracle(ETHERSCAN_API_KEY!);
+
+  const slow = Number(gas.SafeGasPrice);
+  const standard = Number(gas.ProposeGasPrice);
+  const fast = Number(gas.FastGasPrice);
+
+  const data: GasPriceData = {
+    slow,
+    standard,
+    fast,
+    updatedAt: Date.now(),
+  };
+  return data;
+}
+
 // ─── CoinGecko ID Mapping ─────────────────────────────────
 
 // Helper: symbol → coingecko id
 export async function getCoinId(symbol: string): Promise<string | undefined> {
   return COIN_IDS[symbol.toUpperCase()];
 }
-
-// Helper: multiple symbols → coingecko ids string
 
 // Helper: multiple symbols → coingecko ids string "bitcoin,ethereum"
 export async function getCoinIdsCSV(_symbols: string[]): Promise<string> {
@@ -73,13 +107,17 @@ export async function getMarkets(
 ) {
   const ids = await getCoinIdsCSV(symbols);
   if (!ids) return { data: null, error: "No valid coin IDs", status: 0 };
-  const coinsData = await fetcher<CoinMarketData[]>("/coins/markets", {
-    vs_currency: currency,
-    ids,
-    order: "market_cap_desc",
-    per_page: perPage,
-    sparkline: false,
-  });
+  const coinsData = await fetcher<CoinMarketData[]>(
+    "/coins/markets",
+    {
+      vs_currency: currency,
+      ids,
+      order: "market_cap_desc",
+      per_page: perPage,
+      sparkline: false,
+    },
+    300,
+  );
   return { data: coinsData, error: "", status: 1 };
 }
 
@@ -88,42 +126,69 @@ export async function getMarkets(
  * @example getCoinDetails("bitcoin")
  */
 export async function getCoinDetails(coinId: string) {
-  return await fetcher<CoinDetailsData>(`/coins/${coinId}`, {
-    localization: false,
-    tickers: false,
-    community_data: false,
-    developer_data: false,
-  });
+  return await fetcher<CoinDetailsData>(
+    `/coins/${coinId}`,
+    {
+      localization: false,
+      tickers: false,
+      community_data: false,
+      developer_data: false,
+      dex_pair_format: "symbol",
+    },
+    300,
+  );
 }
 
+/**
+ *
+ * This endpoint allows you to query all the coins categories on CoinGecko
+ */
+export async function getCategoriesWithMarketData() {
+  return await fetcher<Category[]>("/coins/categories", undefined, 300);
+}
 /**
  * Get price chart history
  * @example getMarketChart("bitcoin", 7)  // last 7 days
  */
 export async function getMarketChart(coinId: string, days: number | "max" = 7) {
-  return await fetcher<MarketChart>(`/coins/${coinId}/market_chart`, {
-    vs_currency: "usd",
-    days,
-    interval: days === 1 ? "minutes" : "hourly",
-  });
+  return await fetcher<MarketChartData>(
+    `/coins/${coinId}/market_chart`,
+    {
+      vs_currency: "usd",
+      days,
+      interval: days === 1 ? "minutes" : "hourly",
+    },
+    300,
+  );
 }
 
 /**
  * Get trending coins (top 50 last 24h)
  */
-export async function getTrending() {
-  return await fetcher<{ trending: TrendingCoin[] }>(
-    "/trending",
+export async function getTrendingCoins() {
+  const coinsList = await fetcher<TrendingResponse>(
+    "/search/trending",
     undefined,
     300,
   );
+  return coinsList.coins;
+}
+
+export async function getSupportedCurrenciesList() {
+  const coinList: string[] = await fetcher<string[]>(
+    "/simple/supported_vs_currencies",
+    undefined,
+    86400,
+  );
+
+  return coinList;
 }
 
 /**
  * Get global crypto market data
  */
 export async function getGlobalMarket() {
-  return await fetcher<GlobalMarket>("/global");
+  return await fetcher<GlobalMarket>("/global", undefined, 300);
 }
 
 /**
@@ -131,14 +196,12 @@ export async function getGlobalMarket() {
  * @example getSimplePrice(["bitcoin", "ethereum"])
  */
 export async function getSimplePrice(coinIds: string[], currency = "usd") {
-  return await fetcher<Record<string, Record<string, number>>>(
-    "/simple/price",
-    {
-      ids: coinIds.join(","),
-      vs_currencies: currency,
-      include_24hr_change: true,
-      include_market_cap: true,
-      include_24hr_vol: true,
-    },
-  );
+  return await fetcher<SimplePriceResponse>("/simple/price", {
+    ids: coinIds.join(","),
+    vs_currencies: currency,
+    include_24hr_change: true,
+    include_market_cap: true,
+    include_24hr_vol: true,
+    include_last_updated_at: true,
+  });
 }
