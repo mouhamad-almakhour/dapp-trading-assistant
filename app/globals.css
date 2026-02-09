@@ -169,11 +169,11 @@ body {
   }
 
   .home-wrapper {
-    @apply flex-col gap-4 md:gap-10 items-center sm:items-start;
+    @apply flex flex-col gap-4 md:gap-10 items-center sm:items-start;
   }
 
   .home-section {
-    @apply w-full gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3;
+    @apply grid w-[90%] mx-auto gap-6 md:grid-cols-3 xl:grid-cols-3 mb-6;
   }
 
 
@@ -346,9 +346,8 @@ body {
 
   .sidebar-link {
     @apply flex items-center gap-3 px-4 py-3 text-sm font-medium;
-    @apply transition-colors rounded-md mx-2;
-    color: var(--sidebar-foreground);
-   opacity: 0.7;
+    @apply text-foreground hover:text-foreground;
+    @apply  transition-colors rounded-md mx-2;
   }
 
   .sidebar-link:hover {
@@ -357,7 +356,7 @@ body {
   }
 
   .sidebar-link.active {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--sidebar);
     color: var(--sidebar-foreground);
   }
 

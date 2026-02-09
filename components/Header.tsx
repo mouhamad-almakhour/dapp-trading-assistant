@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 const Header = () => {
   const pathname = usePathname();
   const routeType = getRouteType(pathname);
+  const isDashboard = routeType === "dashboard";
 
   return (
     <header
@@ -22,21 +23,26 @@ const Header = () => {
       )}
     >
       <div className="container h-16 header-wrapper">
-        {/* Logo */}
-        <Link
-          href={ROUTES.LANDING}
-          className=" transition-opacity hover:opacity-80"
-          aria-label="Go to home"
-        >
-          <Image
-            src="/icons/logo.svg"
-            alt="Dapp Trading Assistant"
-            width={140}
-            height={32}
-            className="h-8 w-auto"
-            priority
-          />
-        </Link>
+        {/* Logo - hidden on dashboard */}
+        {!isDashboard && (
+          <Link
+            href={ROUTES.LANDING}
+            className="transition-opacity hover:opacity-80"
+            aria-label="Go to home"
+          >
+            <Image
+              src="/icons/logo.svg"
+              alt="Dapp Trading Assistant"
+              width={140}
+              height={32}
+              className="h-8 w-auto"
+              priority
+            />
+          </Link>
+        )}
+
+        {/* Dashboard: empty left side (sidebar has logo) */}
+        {isDashboard && <div className="flex-1 lg:ml-0 ml-12" />}
 
         {/* Navigation based on route type */}
         <nav className="flex items-center gap-4">
@@ -49,7 +55,7 @@ const Header = () => {
   );
 };
 
-// Memoized navigation components for better performance
+// Memoized navigation components
 const PublicNav = memo(() => (
   <>
     <NavItems variant="landing" />

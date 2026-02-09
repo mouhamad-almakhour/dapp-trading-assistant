@@ -29,16 +29,16 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
         />
       </div>
 
-      <div className="min-h-screen flex">
-        {/* Sidebar */}
-        <aside className="hidden sm:block w-64">
-          <Sidebar />
-        </aside>
+      <div className="min-h-screen flex overflow-hidden">
+        <Sidebar />
 
-        {/* Main content */}
-        <main className="flex-1">
-          <div className="container py-10">{children}</div>
-        </main>
+        <div className="flex-1 flex flex-col lg:ml-64 overflow-hidden">
+          <main className="flex-1 overflow-y-auto">
+            <div className="container max-w-7xl mx-auto py-6 px-4 lg:px-8">
+              {children}
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );
