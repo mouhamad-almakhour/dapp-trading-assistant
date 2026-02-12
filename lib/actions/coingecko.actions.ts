@@ -45,40 +45,6 @@ export async function fetcher<T>(
   return response.json();
 }
 
-async function fetchGasOracle(apiKey: string) {
-  const url = `https://api.etherscan.io/v2/api?chainid=1&module=gastracker&action=gasoracle&apikey=${apiKey}`;
-
-  const res = await fetch(url, { next: { revalidate: 300 } });
-
-  if (!res.ok) {
-    throw new Error(`Etherscan error: ${res.status}`);
-  }
-
-  const data = await res.json();
-
-  if (data.status !== "1") {
-    throw new Error(`Etherscan API error: ${data.message}`);
-  }
-
-  return data.result;
-}
-
-export async function getGasPrice() {
-  const gas = await fetchGasOracle(ETHERSCAN_API_KEY!);
-
-  const slow = Number(gas.SafeGasPrice);
-  const standard = Number(gas.ProposeGasPrice);
-  const fast = Number(gas.FastGasPrice);
-
-  const data: GasPriceData = {
-    slow,
-    standard,
-    fast,
-    updatedAt: Date.now(),
-  };
-  return data;
-}
-
 // ─── CoinGecko ID Mapping ─────────────────────────────────
 
 // Helper: symbol → coingecko id

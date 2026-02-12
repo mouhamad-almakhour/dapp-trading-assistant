@@ -1,6 +1,6 @@
 import { ActiveAlerts } from "@/components/dashboard/ActiveAlerts";
 import { GasMiniWidget } from "@/components/dashboard/GasMiniWidget";
-import { getGasPrice } from "@/lib/actions/coingecko.actions";
+import { getGasPrice } from "@/lib/actions/etherscan.actions";
 
 const GasTracker = async () => {
   let gas: GasPriceData | null = null;

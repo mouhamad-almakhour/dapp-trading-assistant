@@ -368,40 +368,6 @@ export const COIN_IDS: Record<string, string> = {
   UNI: "uniswap",
 };
 
-// Popular tokens for quick selection
-export const POPULAR_TOKENS: SwapToken[] = [
-  {
-    address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-    symbol: "WETH",
-    name: "Wrapped Ether",
-    decimals: 18,
-  },
-  {
-    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-    symbol: "USDC",
-    name: "USD Coin",
-    decimals: 6,
-  },
-  {
-    address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-    symbol: "USDT",
-    name: "Tether USD",
-    decimals: 6,
-  },
-  {
-    address: "0x2260FAC8A66351360556866AB5Bb8b724513Ba0d",
-    symbol: "WBTC",
-    name: "Wrapped Bitcoin",
-    decimals: 8,
-  },
-  {
-    address: "0x514910771af9ca656af840dff83e8264ecf986ca",
-    symbol: "LINK",
-    name: "ChainLink",
-    decimals: 18,
-  },
-];
-
 export const COIN_CHART_WIDGET_CONFIG = (symbol: string) => ({
   allow_symbol_change: false,
   calendar: false,
@@ -427,3 +393,66 @@ export const COIN_CHART_WIDGET_CONFIG = (symbol: string) => ({
   width: "100%",
   height: 600,
 });
+
+export const POPULAR_TOKENS: Token[] = [
+  {
+    id: "ethereum",
+    symbol: "ETH",
+    name: "Ethereum",
+    address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", // WETH
+    decimals: 18,
+    logoUrl: "https://assets.coingecko.com/coins/images/279/small/ethereum.png",
+  },
+  {
+    id: "usd-coin",
+    symbol: "USDC",
+    name: "USD Coin",
+    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    decimals: 6,
+    logoUrl:
+      "https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png",
+  },
+  {
+    id: "tether",
+    symbol: "USDT",
+    name: "Tether",
+    address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    decimals: 6,
+    logoUrl: "https://assets.coingecko.com/coins/images/325/small/Tether.png",
+  },
+  {
+    id: "wrapped-bitcoin",
+    symbol: "WBTC",
+    name: "Wrapped Bitcoin",
+    address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+    decimals: 8,
+    logoUrl:
+      "https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png",
+  },
+  {
+    id: "dai",
+    symbol: "DAI",
+    name: "Dai",
+    address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    decimals: 18,
+    logoUrl: "https://assets.coingecko.com/coins/images/9956/small/4943.png",
+  },
+  {
+    id: "chainlink",
+    symbol: "LINK",
+    name: "Chainlink",
+    address: "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+    decimals: 18,
+    logoUrl:
+      "https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png",
+  },
+  {
+    id: "uniswap",
+    symbol: "UNI",
+    name: "Uniswap",
+    address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+    decimals: 18,
+    logoUrl:
+      "https://assets.coingecko.com/coins/images/12504/small/uniswap-uni.png",
+  },
+];

@@ -16,7 +16,7 @@ export const ROUTES = {
   // Dashboard routes
   DASHBOARD: "/dashboard",
   GAS_TRACKER: "/gas-tracker",
-  SWAP: "/swap",
+  SWAP: "/swap-change",
   MARKET: "/market",
   ALERTS: "/alerts",
   SETTINGS: "/settings",

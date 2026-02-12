@@ -134,7 +134,7 @@ export function Sidebar() {
         {/* Footer */}
         <div className="p-4 border-t border-border">
           <div className="text-xs text-sidebar-foreground/50 text-center">
-            © 2025 DApp Assistant
+            © 2026 DApp Assistant
           </div>
         </div>
       </aside>

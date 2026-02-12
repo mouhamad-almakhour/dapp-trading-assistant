@@ -4,7 +4,8 @@ import { StatsBar } from "@/components/dashboard/StatsBar";
 import { Watchlist } from "@/components/dashboard/Watchlist";
 import { TrendingCoinsFallback } from "@/components/market/fallback";
 import TrendingCoins from "@/components/market/TrendingCoins";
-import { getGasPrice, getMarkets } from "@/lib/actions/coingecko.actions";
+import { getMarkets } from "@/lib/actions/coingecko.actions";
+import { getGasPrice } from "@/lib/actions/etherscan.actions";
 import { Suspense } from "react";
 
 const Dashboard = async () => {
