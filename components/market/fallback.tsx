@@ -54,7 +54,6 @@ export const TrendingCoinsFallback = () => {
         columns={columns as any}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         rowKey={(item: any) => item.id}
-        tableClassName="trending-coins-table"
       />
     </div>
   );
