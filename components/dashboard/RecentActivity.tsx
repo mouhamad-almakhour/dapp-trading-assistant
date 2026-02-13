@@ -105,7 +105,7 @@ export function RecentActivity() {
                       </span>
                     )}
                     <span className="text-xs text-muted-foreground">
-                      • {formatTimeAgo(activity.createdAt.getTime())}
+                      • {new Date(activity.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
