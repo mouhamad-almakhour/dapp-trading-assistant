@@ -108,6 +108,60 @@ declare global {
   type ISODateString = string;
   type Nullable<T> = T | null;
 
+  /**
+   * Swap page type definitions
+   * All types used in the swap functionality
+   */
+
+  interface Token {
+    id: string;
+    symbol: string;
+    name: string;
+    address: string;
+    decimals: number;
+    logoUrl?: string;
+    price?: number;
+  }
+
+  interface SwapQuote {
+    fromToken: {
+      address: string;
+      symbol: string;
+      decimals: number;
+    };
+    toToken: {
+      address: string;
+      symbol: string;
+      decimals: number;
+    };
+    amountIn: string; // Wei/smallest unit
+    amountOut: string; // Wei/smallest unit
+    amountInFormatted: string; // Human readable
+    amountOutFormatted: string; // Human readable
+    pairAddress: string;
+    reserves: {
+      reserve0: string;
+      reserve1: string;
+    };
+  }
+  interface SwapRequest {
+    fromTokenAddress: string; // contract address
+    toTokenAddress: string; // contract address
+    amountIn: string; // input amount
+  }
+
+  interface SwapResponse {
+    success: boolean;
+    data?: SwapQuote;
+    error?: string;
+  }
+
+  interface TokenBalance {
+    token: Token;
+    balance: string;
+    balanceUSD: number;
+  }
+
   interface CoinMarketData {
     id: string;
     symbol: string;

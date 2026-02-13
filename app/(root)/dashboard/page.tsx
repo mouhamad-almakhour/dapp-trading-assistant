@@ -1,10 +1,11 @@
-import { ActiveAlerts } from "@/components/dashboard/ActiveAlerts";
+import { ActiveAlerts } from "@/components/ActiveAlerts";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { StatsBar } from "@/components/dashboard/StatsBar";
 import { Watchlist } from "@/components/dashboard/Watchlist";
 import { TrendingCoinsFallback } from "@/components/market/fallback";
-import TrendingCoins from "@/components/market/TrendingCoins";
-import { getGasPrice, getMarkets } from "@/lib/actions/coingecko.actions";
+import TrendingCoins from "@/components/TrendingCoins";
+import { getMarkets } from "@/lib/actions/coingecko.actions";
+import { getGasPrice } from "@/lib/actions/etherscan.actions";
 import { Suspense } from "react";
 
 const Dashboard = async () => {
@@ -15,10 +16,16 @@ const Dashboard = async () => {
 
   return (
     <div className="space-y-6">
-      {/* 1. Stats Bar - top */}
+      {/* Header */}
+      <div className="flex flex-col gap-2">
+        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground">Welcome to your admin dashboard</p>
+      </div>
+
+      {/* Stats Bar */}
       <StatsBar markets={markets.data ?? []} gas={gas} />
 
-      {/* 2. Gas + Quick Swap */}
+      {/* Watchlist + Trending */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Watchlist />
         <Suspense fallback={<TrendingCoinsFallback />}>
@@ -26,7 +33,7 @@ const Dashboard = async () => {
         </Suspense>
       </div>
 
-      {/* 4. Watchlist + Active Alerts */}
+      {/* Alerts + Activity */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ActiveAlerts gas={gas} />
         <RecentActivity />

@@ -1,5 +1,6 @@
 import LightRays from "@/components/LightRays";
 import { Sidebar } from "@/components/SideBar";
+import { SidebarWrapper } from "@/components/SidebarWrapper";
 import { auth } from "@/lib/better-auth/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -29,17 +30,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
         />
       </div>
 
-      <div className="min-h-screen flex">
-        {/* Sidebar */}
-        <aside className="hidden sm:block w-64">
-          <Sidebar />
-        </aside>
-
-        {/* Main content */}
-        <main className="flex-1">
-          <div className="container py-10">{children}</div>
-        </main>
-      </div>
+      <SidebarWrapper>{children}</SidebarWrapper>
     </div>
   );
 };

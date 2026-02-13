@@ -67,7 +67,7 @@ export default function AlertsPage() {
           </div>
 
           {/* Submit */}
-          <Button onClick={handleAddAlert} className="w-full">
+          <Button onClick={handleAddAlert} className="btn-success w-full">
             {loading ? (
               <Loader2 size={16} className="animate-spin" />
             ) : (
@@ -86,7 +86,7 @@ export default function AlertsPage() {
         <CardContent>
           {loading ? (
             <div className="flex justify-center py-8">
-              <div className="spinner h-6 w-6" />
+              <div className=" h-6 w-6" />
             </div>
           ) : error ? (
             <p className="text-sm text-red-500">{error}</p>
@@ -110,6 +110,7 @@ export default function AlertsPage() {
                     </p>
                   </div>
                   <Button
+                    className="btn-danger"
                     variant="ghost"
                     size="sm"
                     onClick={() => removeAlert(alert.id).catch(() => {})}
