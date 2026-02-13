@@ -63,12 +63,12 @@ export const CategoriesFallback = () => {
   const columns = [
     {
       header: "Category",
-      cellClassName: "category-cell",
+
       cell: () => <div className="category-line skeleton" />,
     },
     {
       header: "Top Gainers",
-      cellClassName: "top-gainers-cell",
+
       cell: () => (
         <div className="flex gap-1">
           <div className="gainer-image skeleton" />
@@ -79,7 +79,6 @@ export const CategoriesFallback = () => {
     },
     {
       header: "24h Change",
-      cellClassName: "change-header-cell",
       cell: () => (
         <div className="change-cell">
           <div className="change-icon skeleton" />
@@ -89,12 +88,10 @@ export const CategoriesFallback = () => {
     },
     {
       header: "Market Cap",
-      cellClassName: "market-cap-cell",
       cell: () => <div className="value-skeleton-lg skeleton" />,
     },
     {
       header: "24h Volume",
-      cellClassName: "volume-cell",
       cell: () => <div className="value-skeleton-md skeleton" />,
     },
   ];
@@ -110,7 +107,6 @@ export const CategoriesFallback = () => {
         columns={columns as any}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         rowKey={(item: any) => item.id}
-        tableClassName="mt-3"
       />
     </div>
   );
