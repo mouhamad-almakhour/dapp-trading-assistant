@@ -1,79 +1,129 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+"use client";
+import { useState, useEffect, useCallback } from "react";
 import { POPULAR_TOKENS } from "@/lib/constants";
-import { useState, useCallback } from "react";
+import { getSwapQuote } from "@/lib/actions/eth-swap.actions";
 
-export function useSwap(): UseSwapReturn {
-  const [inputToken, setInputToken] = useState<SwapToken | null>(
-    POPULAR_TOKENS[0],
-  );
-  const [outputToken, setOutputToken] = useState<SwapToken | null>(
-    POPULAR_TOKENS[1],
-  );
+export function useSwap() {
+  // token selection
+  const [fromToken, setFromToken] = useState<Token | null>(POPULAR_TOKENS[0]);
+  const [toToken, setToToken] = useState<Token | null>(POPULAR_TOKENS[1]);
+
+  // input amount
   const [inputAmount, setInputAmount] = useState("");
-  const [outputAmount, setOutputAmount] = useState("");
-  const [result, setResult] = useState<SwapResult | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const calculate = useCallback(async () => {
-    if (!inputToken || !outputToken || !inputAmount) return;
-    if (parseFloat(inputAmount) <= 0) return;
+  // quote state
+  const [quote, setQuote] = useState<SwapQuote | null>(null);
+  const [isLoadingQuote, setIsLoadingQuote] = useState(false);
+  const [quoteError, setQuoteError] = useState<string | null>(null);
 
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch("/api/swap/calculate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          tokenA: inputToken.address,
-          tokenB: outputToken.address,
-          amountIn: inputAmount,
-        }),
-      });
-
-      if (!res.ok) throw new Error("Swap calculation failed");
-
-      const data: SwapResult = await res.json();
-      setResult(data);
-      setOutputAmount(data.outputAmount);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Calculation failed");
-      setOutputAmount("");
-    } finally {
-      setLoading(false);
+  // memoize fetch function
+  const fetchQuote = useCallback(async () => {
+    if (
+      !fromToken ||
+      !toToken ||
+      !inputAmount ||
+      parseFloat(inputAmount) <= 0
+    ) {
+      return;
     }
-  }, [inputToken, outputToken, inputAmount]);
 
-  // Swap input and output tokens
-  const swapTokens = useCallback(() => {
-    setInputToken(outputToken);
-    setOutputToken(inputToken);
-    setInputAmount(outputAmount);
-    setOutputAmount(inputAmount);
-  }, [inputToken, outputToken, inputAmount, outputAmount]);
+    setIsLoadingQuote(true);
+    setQuoteError(null);
 
-  const reset = useCallback(() => {
-    setInputAmount("");
-    setOutputAmount("");
-    setResult(null);
-    setError(null);
-  }, []);
+    const response = await getSwapQuote({
+      fromTokenAddress: fromToken.address,
+      toTokenAddress: toToken.address,
+      amountIn: inputAmount,
+    });
+
+    if (response.success && response.data) {
+      setQuote(response.data);
+    } else {
+      setQuoteError(response.error || "failed to get quote");
+      setQuote(null);
+    }
+
+    setIsLoadingQuote(false);
+  }, [fromToken, toToken, inputAmount]);
+
+  // auto-fetch quote when inputs change (debounced)
+  useEffect(() => {
+    // clear quote immediately if inputs invalid
+    if (
+      !fromToken ||
+      !toToken ||
+      !inputAmount ||
+      parseFloat(inputAmount) <= 0
+    ) {
+      setQuote(null);
+      setQuoteError(null);
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      fetchQuote();
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [fetchQuote, fromToken, inputAmount, toToken]);
+
+  // swap tokens
+  const handleFlipTokens = () => {
+    setFromToken(toToken);
+    setToToken(fromToken);
+  };
+
+  // handle input change
+  const handleAmountChange = (value: string) => {
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setInputAmount(value);
+    }
+  };
+
+  // simulate swap
+  const handleSwap = () => {
+    if (!quote) return;
+
+    alert(
+      `swap simulated successfully!\n\nyou would receive approximately ${quote.amountOutFormatted} ${quote.toToken.symbol}`,
+    );
+  };
+
+  // calculate price impact
+  const getPriceImpact = () => {
+    if (!quote) return 0;
+
+    const reserve0 = parseFloat(quote.reserves.reserve0);
+    const reserve1 = parseFloat(quote.reserves.reserve1);
+    const amountIn = parseFloat(quote.amountIn);
+    const currentPrice = reserve1 / reserve0;
+    const newReserve0 = reserve0 + amountIn;
+    const newReserve1 = reserve1 - parseFloat(quote.amountOut);
+    const newPrice = newReserve1 / newReserve0;
+
+    return Math.abs(((newPrice - currentPrice) / currentPrice) * 100);
+  };
 
   return {
-    inputToken,
-    outputToken,
+    // tokens
+    fromToken,
+    toToken,
+    setFromToken,
+    setToToken,
+    handleFlipTokens,
+
+    // amount
     inputAmount,
-    outputAmount,
-    result,
-    loading,
-    error,
-    setInputToken,
-    setOutputToken,
-    setInputAmount,
-    swapTokens,
-    calculate,
-    reset,
+    handleAmountChange,
+
+    // quote
+    quote,
+    isLoadingQuote,
+    quoteError,
+
+    // actions
+    handleSwap,
+    getPriceImpact,
   };
 }

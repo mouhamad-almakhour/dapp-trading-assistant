@@ -15,7 +15,7 @@ export function StatCard({
     <Card className="stats-card">
       <CardContent className="px-4 py-0.5">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs text-muted-foreground uppercase tracking-wide">
+          <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
             {title}
           </span>
           <div>{icon}</div>

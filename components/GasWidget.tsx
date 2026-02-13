@@ -7,11 +7,11 @@ import { calculateGasLevel, cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/config/routes";
 import { GAS_LEVEL_STYLES, GAS_TYPE_STYLES, GAS_TYPES } from "@/lib/constants";
 
-interface GasMiniWidgetProps {
+interface GasWidgetProps {
   gas: GasPriceData | null;
 }
 
-export function GasMiniWidget({ gas }: GasMiniWidgetProps) {
+export function GasWidget({ gas }: GasWidgetProps) {
   const gasLevel = gas ? calculateGasLevel(Number(gas?.standard)) : "medium";
   const levelStyle = GAS_LEVEL_STYLES[gasLevel];
 

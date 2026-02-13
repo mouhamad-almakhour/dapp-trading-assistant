@@ -1,5 +1,5 @@
-import ExploreBtn from "@/components/ExploreBtn";
-import FeatureSlider from "@/components/FeatureSlider";
+import ExploreBtn from "@/components/landing/ExploreBtn";
+import FeatureSlider from "@/components/landing/FeatureSlider";
 
 const Home = () => {
   return (

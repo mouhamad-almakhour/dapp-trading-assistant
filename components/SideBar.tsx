@@ -13,6 +13,8 @@ import {
   Bell,
   Menu,
   X,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/config/routes";
@@ -51,11 +53,16 @@ const routes = [
   },
 ];
 
-export function Sidebar() {
-  const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+interface SidebarProps {
+  isCollapsed: boolean;
+  setIsCollapsed: (collapsed: boolean) => void;
+}
 
-  const closeSidebar = () => setIsOpen(false);
+export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
+  const pathname = usePathname();
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  const closeMobileSidebar = () => setIsMobileOpen(false);
 
   return (
     <>
@@ -63,44 +70,70 @@ export function Sidebar() {
       <Button
         variant="ghost"
         size="icon"
-        onClick={() => setIsOpen(true)}
+        onClick={() => setIsMobileOpen(true)}
         className="fixed top-4 left-4 z-50 lg:hidden"
       >
         <Menu className="h-6 w-6" />
       </Button>
 
       {/* Overlay for mobile */}
-      {isOpen && (
+      {isMobileOpen && (
         <div
           className="fixed inset-0 bg-background/60 z-40 lg:hidden"
-          onClick={closeSidebar}
+          onClick={closeMobileSidebar}
         />
       )}
 
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed top-0 left-0 h-screen w-64 bg-background  z-50 transition-transform duration-300",
-          isOpen ? "translate-x-0" : "-translate-x-full",
+          "fixed top-0 left-0 h-screen bg-background z-50 transition-all duration-300",
+          // Mobile: full width with slide animation
+          "w-64",
+          isMobileOpen ? "translate-x-0" : "-translate-x-full",
+          // Desktop: always visible, adjustable width
           "lg:translate-x-0",
+          isCollapsed ? "lg:w-16" : "lg:w-64",
         )}
       >
-        {/* Close button for mobile */}
+        {/* Desktop Collapse Toggle Button */}
         <Button
           variant="ghost"
           size="icon"
-          onClick={closeSidebar}
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="hidden lg:flex absolute -right-3 top-6 h-6 w-6 rounded-full border bg-background shadow-md hover:shadow-lg z-10"
+        >
+          {isCollapsed ? (
+            <ChevronRight className="h-4 w-4" />
+          ) : (
+            <ChevronLeft className="h-4 w-4" />
+          )}
+        </Button>
+
+        {/* Mobile Close Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={closeMobileSidebar}
           className="absolute top-4 right-4 lg:hidden"
         >
           <X className="h-5 w-5" />
         </Button>
 
         {/* Logo */}
-        <div className="p-6">
+        <div
+          className={cn(
+            "p-6",
+            isCollapsed && "lg:p-3 lg:flex lg:justify-center",
+          )}
+        >
           <Link
             href="/"
-            className="flex items-center gap-2 text-xl font-bold text-sidebar-foreground"
-            onClick={closeSidebar}
+            className={cn(
+              "flex items-center gap-2 text-xl font-bold text-sidebar-foreground",
+              isCollapsed && "lg:flex-col lg:gap-0",
+            )}
+            onClick={closeMobileSidebar}
           >
             <Image
               src="/icons/logo.svg"
@@ -109,7 +142,8 @@ export function Sidebar() {
               height={24}
               priority
             />
-            Dapp Assistant
+            {!isCollapsed && <span className="lg:block">Dapp Assistant</span>}
+            {isCollapsed && <span className="hidden">DA</span>}
           </Link>
         </div>
 
@@ -119,24 +153,28 @@ export function Sidebar() {
             <Link
               key={route.href}
               href={route.href}
-              onClick={closeSidebar}
+              onClick={closeMobileSidebar}
               className={cn(
                 "sidebar-link",
                 pathname === route.href && "active",
+                isCollapsed && "lg:justify-center lg:px-2",
               )}
+              title={isCollapsed ? route.label : undefined}
             >
-              <route.icon className="h-5 w-5" />
-              <span>{route.label}</span>
+              <route.icon className="h-5 w-5 flex-shrink-0" />
+              {!isCollapsed && <span>{route.label}</span>}
             </Link>
           ))}
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t border-border">
-          <div className="text-xs text-sidebar-foreground/50 text-center">
-            © 2026 DApp Assistant
+        {!isCollapsed && (
+          <div className="p-4 border-t border-border">
+            <div className="text-xs text-sidebar-foreground/50 text-center">
+              © 2026 DApp Assistant
+            </div>
           </div>
-        </div>
+        )}
       </aside>
     </>
   );

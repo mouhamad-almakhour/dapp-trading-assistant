@@ -1,4 +1,4 @@
-import TradingViewWidget from "@/components/alert/TradingViewWidget";
+import TradingViewWidget from "@/components/market/TradingViewWidget";
 import { Button } from "@/components/ui/button";
 import {
   SYMBOL_INFO_WIDGET_CONFIG,
@@ -26,16 +26,13 @@ async function StockDetails({ params }: StockDetailsProps) {
             title=""
             scriptUrl={`${scriptUrl}advanced-chart.js`}
             config={COIN_CHART_WIDGET_CONFIG(id)}
-            className="custom-chart"
             height={600}
           />
         </div>
         {/* Right column */}
         <div className="flex flex-col gap-6">
           <div className="flex items-center justify-between">
-            <Button className="yellow-btn w-full mt-5">
-              add to Watch list
-            </Button>
+            <Button className="w-full mt-5">add to Watch list</Button>
           </div>
 
           <TradingViewWidget

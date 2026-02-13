@@ -1,5 +1,5 @@
-import { ActiveAlerts } from "@/components/dashboard/ActiveAlerts";
-import { GasMiniWidget } from "@/components/dashboard/GasMiniWidget";
+import { ActiveAlerts } from "@/components/ActiveAlerts";
+import { GasWidget } from "@/components/GasWidget";
 import { getGasPrice } from "@/lib/actions/etherscan.actions";
 
 const GasTracker = async () => {
@@ -12,7 +12,7 @@ const GasTracker = async () => {
 
   return (
     <div className="space-y-6">
-      <GasMiniWidget gas={gas} />
+      <GasWidget gas={gas} />
       <ActiveAlerts gas={gas} />
     </div>
   );

@@ -155,7 +155,11 @@ export default function SignIn() {
                 </Link>
               </div>
             </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              className=" btn-primary w-full"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? (
                 <Loader2 size={16} className="animate-spin" />
               ) : (

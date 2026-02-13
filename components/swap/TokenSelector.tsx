@@ -101,7 +101,7 @@ export function TokenSelector({
         </div>
 
         {/* Token list */}
-        <div className="max-h-[400px] overflow-y-auto">
+        <div className="max-h-100 overflow-y-auto">
           {filteredTokens.length === 0 ? (
             <p className="text-center text-sm text-muted-foreground py-8">
               No tokens found

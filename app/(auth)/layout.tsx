@@ -25,7 +25,6 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
           mouseInfluence={0.1}
           noiseAmount={0}
           distortion={0.2}
-          className="custom-rays"
           pulsating={false}
           fadeDistance={1}
           saturation={0.5}

@@ -46,7 +46,6 @@ const TickerTape = ({
 
       containerRef.current.appendChild(script);
     } else {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsInitialized(true);
     }
 

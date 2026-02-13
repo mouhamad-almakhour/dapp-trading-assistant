@@ -1,5 +1,5 @@
-import TickerTape from "@/components/alert/TickerTape";
-import TradingViewWidget from "@/components/alert/TradingViewWidget";
+import TickerTape from "@/components/market/TickerTape";
+import TradingViewWidget from "@/components/market/TradingViewWidget";
 import {
   DEFAULT_TICKER_TAPE_SYMBOLS,
   HEATMAP_WIDGET_CONFIG,
@@ -18,13 +18,12 @@ const Market = () => {
       </div>
 
       {/* Section 1 */}
-      <section className="grid w-[90%] mx-auto gap-6 md:grid-cols-3 xl:grid-cols-3 mb-6">
+      <section className="home-section">
         <div className="col-span-3 md:col-span-1">
           <TradingViewWidget
             title="Market Overview"
             scriptUrl={`${scriptUrl}market-overview.js`}
             config={MARKET_OVERVIEW_WIDGET_CONFIG}
-            className="custom-chart"
             height={600}
           />
         </div>
@@ -39,7 +38,7 @@ const Market = () => {
       </section>
 
       {/* Section 2 */}
-      <section className="grid w-[90%] mx-auto gap-6 md:grid-cols-3 xl:grid-cols-3 mb-6">
+      <section className="home-section">
         <div className="col-span-3 md:col-span-1">
           <TradingViewWidget
             scriptUrl={`${scriptUrl}timeline.js`}

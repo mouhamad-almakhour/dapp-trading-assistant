@@ -13,34 +13,20 @@ import { cn } from "@/lib/utils";
 interface SwapQuoteDisplayProps {
   /** Swap quote data from backend */
   quote: SwapQuote;
+  priceImpact: number;
 }
 
 /**
  * Displays detailed swap quote information
  * Shows exchange rate, reserves, and pair details
  */
-export function SwapQuoteDisplay({ quote }: SwapQuoteDisplayProps) {
+export function SwapQuoteDisplay({
+  quote,
+  priceImpact,
+}: SwapQuoteDisplayProps) {
   // Calculate exchange rate
   const exchangeRate =
     parseFloat(quote.amountOutFormatted) / parseFloat(quote.amountInFormatted);
-
-  // Calculate price impact based on reserves
-  const calculatePriceImpact = () => {
-    const reserve0 = parseFloat(quote.reserves.reserve0);
-    const reserve1 = parseFloat(quote.reserves.reserve1);
-    const amountIn = parseFloat(quote.amountIn);
-
-    // Simple price impact calculation
-    const currentPrice = reserve1 / reserve0;
-    const newReserve0 = reserve0 + amountIn;
-    const newReserve1 = reserve1 - parseFloat(quote.amountOut);
-    const newPrice = newReserve1 / newReserve0;
-
-    const impact = Math.abs(((newPrice - currentPrice) / currentPrice) * 100);
-    return impact;
-  };
-
-  const priceImpact = calculatePriceImpact();
 
   // Determine price impact severity
   const getPriceImpactColor = (impact: number) => {
