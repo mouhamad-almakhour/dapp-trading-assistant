@@ -12,11 +12,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import NavItems from "./Navitems";
-import { signOut } from "@/lib/actions/auth.actions";
 import { Wallet, LogOut, Copy, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
-
-import { useSession } from "@/lib/better-auth/auth-client";
+import { signOut, useSession } from "@/lib/better-auth/auth-client";
 
 const UserDropdown = () => {
   const { data: session } = useSession();
@@ -57,8 +55,8 @@ const UserDropdown = () => {
 
   const handleSignout = async () => {
     // if (isConnected && address) disconnect.mutate();
-
     await signOut();
+    router.refresh();
     router.push("/sign-in");
   };
 

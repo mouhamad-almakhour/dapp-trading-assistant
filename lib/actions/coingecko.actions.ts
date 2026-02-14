@@ -5,11 +5,9 @@ import { COIN_IDS } from "../constants";
 
 const BASE_URL = process.env.COINGECKO_BASE_URL;
 const COINGECKO_API_KEY = process.env.COINGECKO_API_KEY;
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
 if (!BASE_URL) throw new Error("Could not get base url");
 if (!COINGECKO_API_KEY) throw new Error("Could not get api key");
-if (!ETHERSCAN_API_KEY) throw new Error("Could not get api key");
 
 export async function fetcher<T>(
   endpoint: string,

@@ -12,10 +12,7 @@ export const auth = betterAuth({
   database: mongodbAdapter(db),
   secret: process.env.BETTER_AUTH_SECRET!,
   baseURL: process.env.BETTER_AUTH_URL!,
-  trustedOrigins: [
-    "http://localhost:3000", // dev
-    "https://dapp-trading-assistant.vercel.app", // production
-  ],
+  trustedOrigins: [process.env.NEXT_PUBLIC_APP_URL!],
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
