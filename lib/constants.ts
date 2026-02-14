@@ -69,7 +69,7 @@ export const COIN_PROFILE_WIDGET_CONFIG = (symbol: string) => ({
   height: 464,
   displayMode: "regular",
 });
-export const INITIAL_STOCKS: StockAsset[] = [
+export const INITIAL_COINS: StockAsset[] = [
   {
     symbol: "BTC",
     name: "Bitcoin",
