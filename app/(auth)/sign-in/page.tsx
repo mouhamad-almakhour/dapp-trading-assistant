@@ -26,6 +26,7 @@ import { signInWithEmail } from "@/lib/actions/auth.actions";
 export default function SignIn() {
   const router = useRouter();
   const [rememberMe, setRememberMe] = useState(false);
+  const [socialLoading, setSocialLoading] = useState(false);
 
   const {
     register,
@@ -71,26 +72,40 @@ export default function SignIn() {
   };
 
   const handelSocialSignIn = async (provider: "google" | "github") => {
-    await signIn.social({
-      provider,
-      callbackURL: "/dashboard",
-      fetchOptions: {
-        onError: (ctx) => {
-          toast.error("Sign in failed", {
-            description:
-              ctx.error.message || "An error occurred during sign in",
-            position: "top-center",
-          });
-        },
-        onSuccess: () => {
-          toast.success("Signed in successfully!", {
-            description: "You have successfully signed in.",
-          });
-        },
-      },
-    });
-  };
+    try {
+      setSocialLoading(true);
 
+      // wrap in Promise.all to ensure minimum loader time
+      await Promise.all([
+        signIn.social({
+          provider,
+          callbackURL: "/dashboard",
+          fetchOptions: {
+            onError: (ctx) => {
+              toast.error("Sign in failed", {
+                description:
+                  ctx.error.message || "An error occurred during sign in",
+                position: "top-center",
+              });
+            },
+            onSuccess: () => {
+              toast.success("Signed in successfully!", {
+                description: "You have successfully signed in.",
+              });
+            },
+          },
+        }),
+        new Promise((resolve) => setTimeout(resolve, 2000)), // 2 second
+      ]);
+    } catch (e) {
+      toast.error("Sign in failed", {
+        description: e instanceof Error ? e.message : "An error occurred",
+        position: "top-center",
+      });
+    } finally {
+      setSocialLoading(false);
+    }
+  };
   return (
     <Card className="max-w-md">
       <CardHeader>
@@ -179,7 +194,7 @@ export default function SignIn() {
           <Button
             variant="outline"
             className="w-full gap-2"
-            disabled={isSubmitting}
+            disabled={isSubmitting || socialLoading}
             onClick={async () => handelSocialSignIn("google")}
           >
             <svg
@@ -188,6 +203,8 @@ export default function SignIn() {
               height="1em"
               viewBox="0 0 256 262"
             >
+              {socialLoading && <Loader2 size={16} className="animate-spin" />}
+
               <path
                 fill="#4285F4"
                 d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"
@@ -210,9 +227,10 @@ export default function SignIn() {
           <Button
             variant="outline"
             className="w-full gap-2"
-            disabled={isSubmitting}
+            disabled={isSubmitting || socialLoading}
             onClick={() => handelSocialSignIn("github")}
           >
+            {socialLoading && <Loader2 size={16} className="animate-spin" />}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="1em"
