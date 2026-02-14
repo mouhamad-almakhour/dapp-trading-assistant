@@ -3,17 +3,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import SearchCommand from "@/components/SearchCommand";
 import { NAV_ITEMS } from "@/lib/constants";
 type NavVariant = "landing" | "dashboard";
 
-const NavItems = ({ variant }: { variant: NavVariant }) => {
-  const pathname = usePathname();
-
-  const isActive = (path: string) => {
-    if (path === "/") return pathname === "/";
-    return pathname === path || pathname.startsWith(`${path}/`);
-  };
-
+const NavItems = ({
+  variant,
+  initialCoins,
+}: {
+  variant: NavVariant;
+  initialCoins: StockAsset[];
+}) => {
   if (variant === "landing") {
     return (
       <div className="flex items-center gap-2">
@@ -28,38 +28,11 @@ const NavItems = ({ variant }: { variant: NavVariant }) => {
   }
 
   return (
-    <ul className="flex flex-col sm:flex-row p-2 gap-3 sm:gap-10 font-medium">
-      {NAV_ITEMS.map(({ href, label }) => (
-        <li key={href} className="relative group">
-          <Link
-            href={href}
-            className={`
-              transition-colors duration-200
-              ${
-                isActive(href)
-                  ? "text-foreground font-semibold"
-                  : "text-muted-foreground hover:text-yellow-500"
-              }
-            `}
-          >
-            {label}
-            <span
-              className={`
-                absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-500
-                transition-transform duration-300 ease-in-out
-                origin-left
-                ${
-                  isActive(href)
-                    ? "scale-x-100"
-                    : "scale-x-0 group-hover:scale-x-100"
-                }
-              `}
-              aria-hidden="true"
-            />
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-10 p-2 font-medium">
+      <div className="sm:ml-auto mt-2 sm:mt-0">
+        <SearchCommand initialCoins={initialCoins} />
+      </div>
+    </div>
   );
 };
 
