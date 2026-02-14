@@ -7,7 +7,10 @@ import { POPULAR_TOKENS } from "../constants";
  * Handles all swap-related API calls to backend
  */
 
-const BACKEND_URL = "https://eth-gas-swap-api.vercel.app/v1/api";
+const BACKEND_URL = process.env.NEXT_PUBLIC_SWAP_BACKEND;
+if (!BACKEND_URL) {
+  throw new Error("NEXT_PUBLIC_SWAP_BACKEND environment variable is not set");
+}
 
 /**
  * Calculate swap quote from backend

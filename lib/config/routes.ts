@@ -10,7 +10,7 @@ export const ROUTES = {
   // Auth routes
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
-  FORGOT_PASSWORD: "/forgot-password",
+  FORGET_PASSWORD: "/forget-password",
   RESET_PASSWORD: "/reset-password",
 
   // Dashboard routes
@@ -32,7 +32,7 @@ export const ROUTE_PATTERNS = {
   auth: [
     ROUTES.SIGN_IN,
     ROUTES.SIGN_UP,
-    ROUTES.FORGOT_PASSWORD,
+    ROUTES.FORGET_PASSWORD,
     ROUTES.RESET_PASSWORD,
   ],
   dashboard: [
