@@ -126,6 +126,10 @@ export async function getMarketChart(coinId: string, days: number | "max" = 7) {
   );
 }
 
+export async function fetchCoinsList(): Promise<Coin[]> {
+  return fetcher<Coin[]>("/coins/list", undefined, 3600);
+}
+
 /**
  * Get trending coins (top 50 last 24h)
  */

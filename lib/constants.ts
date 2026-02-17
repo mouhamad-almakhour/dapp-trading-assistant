@@ -69,42 +69,28 @@ export const COIN_PROFILE_WIDGET_CONFIG = (symbol: string) => ({
   height: 464,
   displayMode: "regular",
 });
-export const INITIAL_COINS: StockAsset[] = [
-  {
-    symbol: "BTC",
-    name: "Bitcoin",
-    exchange: "CRYPTO",
-    type: "cryptocurrency",
-    isInWatchlist: false,
-  },
-  {
-    symbol: "ETH",
-    name: "Ethereum",
-    exchange: "CRYPTO",
-    type: "cryptocurrency",
-    isInWatchlist: false,
-  },
-  {
-    symbol: "SOL",
-    name: "Solana",
-    exchange: "CRYPTO",
-    type: "cryptocurrency",
-    isInWatchlist: false,
-  },
-  {
-    symbol: "CRYPTOCAP:LINK",
-    name: "Chainlink",
-    exchange: "CRYPTO",
-    type: "cryptocurrency",
-    isInWatchlist: false,
-  },
-  {
-    symbol: "AVAX",
-    name: "Avalanche",
-    exchange: "CRYPTO",
-    type: "cryptocurrency",
-    isInWatchlist: false,
-  },
+
+export const INITIAL_COINS: Coin[] = [
+  { id: "bitcoin", symbol: "btc", name: "Bitcoin" },
+  { id: "ethereum", symbol: "eth", name: "Ethereum" },
+  { id: "tether", symbol: "usdt", name: "Tether" },
+  { id: "binancecoin", symbol: "bnb", name: "BNB" },
+  { id: "solana", symbol: "sol", name: "Solana" },
+  { id: "usd-coin", symbol: "usdc", name: "USDC" },
+  { id: "ripple", symbol: "xrp", name: "XRP" },
+  { id: "staked-ether", symbol: "steth", name: "Lido Staked Ether" },
+  { id: "dogecoin", symbol: "doge", name: "Dogecoin" },
+  { id: "cardano", symbol: "ada", name: "Cardano" },
+  { id: "avalanche-2", symbol: "avax", name: "Avalanche" },
+  { id: "tron", symbol: "trx", name: "TRON" },
+  { id: "chainlink", symbol: "link", name: "Chainlink" },
+  { id: "polkadot", symbol: "dot", name: "Polkadot" },
+  { id: "polygon", symbol: "matic", name: "Polygon" },
+  { id: "litecoin", symbol: "ltc", name: "Litecoin" },
+  { id: "shiba-inu", symbol: "shib", name: "Shiba Inu" },
+  { id: "dai", symbol: "dai", name: "Dai" },
+  { id: "uniswap", symbol: "uni", name: "Uniswap" },
+  { id: "cosmos", symbol: "atom", name: "Cosmos" },
 ];
 
 export const SYMBOL_INFO_WIDGET_CONFIG = (symbol: string) => ({
