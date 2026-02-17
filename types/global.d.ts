@@ -242,6 +242,17 @@ declare global {
     last_updated: ISODateString;
   }
 
+  interface CoinPlatforms {
+    [platform: string]: string;
+  }
+
+  interface Coin {
+    id: string;
+    symbol: string;
+    name: string;
+    platforms?: CoinPlatforms;
+  }
+
   interface TrendingResponse {
     coins: TrendingCoin[];
   }
