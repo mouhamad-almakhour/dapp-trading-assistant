@@ -71,6 +71,11 @@ declare global {
     htmlTemplate: string;
   };
 
+  type sendWelcomeEmail = {
+    email: string;
+    htmlTemplate: string;
+  };
+
   type SignUpServerData = {
     firstName: string;
     lastName: string;

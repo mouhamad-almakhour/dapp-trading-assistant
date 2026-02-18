@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/better-auth/auth";
 import { headers } from "next/headers";
+import { inngest } from "../inngest/client";
 
 export const signUpWithEmail = async ({
   email,
@@ -19,6 +20,17 @@ export const signUpWithEmail = async ({
         image,
       },
     });
+
+    if (response) {
+      await inngest.send({
+        name: "app/user.signup",
+        data: {
+          name: `${firstName} ${lastName}`,
+          email,
+          url: process.env.NEXT_PUBLIC_APP_URL!,
+        },
+      });
+    }
 
     return { success: true, data: response };
   } catch (e) {
