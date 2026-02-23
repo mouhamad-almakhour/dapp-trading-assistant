@@ -41,7 +41,7 @@ export const sendWelcomeEmail = async ({
     });
     return { success: true };
   } catch (error) {
-    console.error("Failed to send password reset email:", error);
-    return { success: false, error: "Failed to send password reset email" };
+    console.error("Failed to send welcome email:", error);
+    return { success: false, error: "Failed to send welcome email" };
   }
 };
