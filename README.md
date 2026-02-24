@@ -32,6 +32,7 @@ The application uses **Better Auth** for authentication and MongoDB for persiste
 - 🔄 `Gas Tracker`: live Ethereum gas tiers with threshold-based alerts.
 - 💱 `Uniswap Swap Simulator`: token pair quoting via external swap backend.
 - 📊 `Market Intelligence`: CoinGecko pricing + TradingView widgets.
+- 🤖 `AI-Powered Personalized Emails`: Inngest-driven async events + Gemini AI generates custom welcome email intros.
 - 🔐 `Authentication`: Better Auth with email/password and social providers.
 - 🔒 `Environment validation for secure deployment`.
 - 🐳 `Docker and docker-compose support` (optional local container workflow).
@@ -45,6 +46,8 @@ The application uses **Better Auth** for authentication and MongoDB for persiste
 - **Database**: MongoDB with Mongoose
 - **Data sources**: CoinGecko API, Etherscan Gas Oracle API, TradingView embeddable widgets
 - **Email**: Resend (verification and reset flows)
+- **Background Jobs**: Inngest (async event processing)
+- **AI**: Google Gemini (personalized content generation)
 - **Tooling**: ESLint, TypeScript
 
 ## Architecture
@@ -53,6 +56,7 @@ The application uses **Better Auth** for authentication and MongoDB for persiste
 - Access control: session checks in authenticated layouts and redirect logic in `proxy/proxy.ts`.
 - Persistence: `Alert` documents for gas alerts and `Activity` documents for event history.
 - Integration boundaries: `lib/actions/*.actions.ts` for external services and `app/api/*` for first-party APIs.
+- Background processing: Inngest event-driven workflows (`lib/inngest/`) trigger async tasks like sending personalized welcome emails enhanced by Gemini AI.
 
 ## General Project Structure
 
@@ -101,8 +105,16 @@ COINGECKO_API_KEY=
 ETHERSCAN_GAS_TRACKER_URL=https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=
 ETHERSCAN_API_KEY=
 
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
 # Emails
 RESEND_API_KEY=
+
+# Background Jobs & AI
+INNGEST_EVENT_KEY=
+GEMINI_API_KEY=
+
+#Backend for swap
+NEXT_PUBLIC_SWAP_BACKEND=https://eth-gas-swap-api.vercel.app/v1/api
 ```
 
 Important production notes:
