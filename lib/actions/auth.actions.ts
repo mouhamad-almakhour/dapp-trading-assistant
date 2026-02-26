@@ -37,7 +37,7 @@ export const signUpWithEmail = async ({
     console.error("Error during sign-up:", e);
     return {
       success: false,
-      error: "Sign up failed",
+      error: e instanceof Error ? e.message : "Unknown error during sign up",
     };
   }
 };

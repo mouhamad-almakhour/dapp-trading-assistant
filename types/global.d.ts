@@ -99,6 +99,11 @@ declare global {
     password: string;
   };
 
+  type ChangePasswordServerData = {
+    currentPassword: string;
+    newPassword: string;
+  };
+
   // Stock/Crypto asset interface and test data
   type StockAsset = {
     symbol: string;
