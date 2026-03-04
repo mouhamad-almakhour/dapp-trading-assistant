@@ -13,6 +13,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import Image from "next/image";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 const updateProfileSchema = z.object({
   name: z.string().trim().min(1, { message: "Name is required" }),
@@ -27,7 +29,9 @@ interface ProfileDetailsFormProps {
 
 export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
   const router = useRouter();
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    user.image ?? null,
+  );
 
   const {
     register,
@@ -56,13 +60,14 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
           position: "top-center",
         });
         return;
-      } else {
-        toast.success("Profile updated successfully!", {
-          description: "Your profile has been updated.",
-          position: "top-center",
-        });
-        router.refresh();
       }
+
+      toast.success("Profile updated successfully!", {
+        description: "Your profile has been updated.",
+        position: "top-center",
+      });
+
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong", {
         description:
@@ -73,15 +78,13 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+    const file = e.target.files?.[0];
 
-    if (!files || files.length === 0) {
-      setValue("image", null);
+    if (!file) {
+      setValue("image", null, { shouldDirty: true });
       setImagePreview(null);
       return;
     }
-
-    const file = files[0];
 
     if (!["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
       toast.error("Invalid image type", {
@@ -89,7 +92,7 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
         position: "top-center",
       });
       e.target.value = "";
-      setValue("image", null);
+      setValue("image", null, { shouldDirty: true });
       setImagePreview(null);
       return;
     }
@@ -100,7 +103,7 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
         position: "top-center",
       });
       e.target.value = "";
-      setValue("image", null);
+      setValue("image", null, { shouldDirty: true });
       setImagePreview(null);
       return;
     }
@@ -109,9 +112,22 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
     reader.onloadend = () => {
       const result = reader.result as string;
       setImagePreview(result);
-      setValue("image", result); // sets a base64 string — schema is happy
+      setValue("image", result, { shouldDirty: true });
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = () => {
+    const fileInput = document.querySelector(
+      'input[name="image"]',
+    ) as HTMLInputElement;
+
+    if (fileInput) {
+      fileInput.value = "";
+    }
+
+    setImagePreview(null);
+    setValue("image", null, { shouldDirty: true });
   };
 
   return (
@@ -122,58 +138,50 @@ export function ProfileDetailsForm({ user }: ProfileDetailsFormProps) {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
           <InputField
-            name="Full Name"
+            name="name"
             label="Full Name"
             placeholder="Full Name"
             register={register}
             error={errors.name}
-            validation={{
-              required: "Full name is required",
-              minLength: 1,
-            }}
           />
 
-          <div className="grid gap-2">
+          <div className="grid gap-2 ">
             <div className="flex items-end gap-4">
               {imagePreview && (
                 <div className="relative w-16 h-16 rounded-sm overflow-hidden">
                   <Image
                     src={imagePreview}
                     alt="Profile preview"
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    className="object-cover"
                   />
                 </div>
               )}
-              <div className="flex items-center gap-2 w-full">
-                <InputField
-                  name="image"
-                  label="Profile Image (optional)"
-                  placeholder="Profile Image"
-                  register={register}
-                  type="file"
-                  error={errors.image}
-                  accept=".png,.jpg,.jpeg"
-                  onChange={handleImageChange}
-                />
 
-                {imagePreview && (
-                  <X
-                    className="cursor-pointer"
-                    onClick={() => {
-                      const fileInput = document.querySelector(
-                        'input[name="image"]',
-                      ) as HTMLInputElement;
-                      if (fileInput) {
-                        fileInput.value = "";
-                      }
-                      setImagePreview(null);
-                    }}
+              <div className="flex items-center gap-2 w-full">
+                <div className="flex flex-col w-full ">
+                  <Label className="block text-sm font-medium">
+                    Profile Image (optional)
+                  </Label>
+                  <Input
+                    type="file"
+                    name="image"
+                    accept=".png,.jpg,.jpeg"
+                    onChange={handleImageChange}
+                    className="border border-gray-300 p-2"
                   />
+                </div>
+                {imagePreview && (
+                  <X className="cursor-pointer" onClick={handleRemoveImage} />
                 )}
               </div>
             </div>
+
+            {errors.image && (
+              <p className="text-sm text-red-500">{errors.image.message}</p>
+            )}
           </div>
+
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
               <Loader2 size={16} className="animate-spin" />

@@ -19,6 +19,8 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import InputField from "@/components/forms/inputField";
 import { signUpWithEmail } from "@/lib/actions/auth.actions";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export default function SignUp() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -37,25 +39,19 @@ export default function SignUp() {
       email: "",
       password: "",
       passwordConfirmation: "",
-      image: undefined,
+      image: "",
     },
     mode: "onBlur",
   });
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
-      let imageBase64: string | undefined;
-
-      if (data.image?.[0]) {
-        imageBase64 = await convertImageToBase64(data.image[0]);
-      }
-
       const result = await signUpWithEmail({
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
         password: data.password,
-        image: imageBase64,
+        image: data.image,
       });
 
       if (!result.success) {
@@ -82,37 +78,56 @@ export default function SignUp() {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+    const file = e.target.files?.[0];
 
-    if (!files || files.length === 0) {
-      setValue("image", undefined); // reset the form field
+    if (!file) {
+      setValue("image", "", { shouldDirty: true });
       setImagePreview(null);
       return;
     }
 
-    const file = files[0];
-
-    // Validate file type
     if (!["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
       toast.error("Invalid image type", {
         description: "Only PNG, JPG or JPEG images are allowed",
         position: "top-center",
       });
       e.target.value = "";
-      setValue("image", undefined); // reset RHF field
+      setValue("image", "", { shouldDirty: true });
       setImagePreview(null);
       return;
     }
 
-    // Update React Hook Form
-    setValue("image", files);
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image too large", {
+        description: "Image must be smaller than 2MB",
+        position: "top-center",
+      });
+      e.target.value = "";
+      setValue("image", "", { shouldDirty: true });
+      setImagePreview(null);
+      return;
+    }
 
-    // Show preview
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImagePreview(reader.result as string);
+      const result = reader.result as string;
+      setImagePreview(result);
+      setValue("image", result, { shouldDirty: true });
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = () => {
+    const fileInput = document.querySelector(
+      'input[name="image"]',
+    ) as HTMLInputElement;
+
+    if (fileInput) {
+      fileInput.value = "";
+    }
+
+    setImagePreview(null);
+    setValue("image", "", { shouldDirty: true });
   };
 
   return (
@@ -216,55 +231,20 @@ export default function SignUp() {
                   </div>
                 )}
                 <div className="flex items-center gap-2 w-full">
-                  <InputField
-                    name="image"
-                    label="Profile Image (optional)"
-                    placeholder="Profile Image"
-                    register={register}
-                    type="file"
-                    error={errors.image}
-                    accept=".png,.jpg,.jpeg"
-                    validation={{
-                      validate: {
-                        fileType: (files: FileList) => {
-                          if (!files?.length) return true;
-                          const file = files[0];
-                          // Check MIME type (image/png, image/jpeg, etc)
-                          const allowedTypes = [
-                            "image/png",
-                            "image/jpeg",
-                            "image/jpg",
-                          ];
-                          return (
-                            allowedTypes.includes(file.type) ||
-                            "Only PNG, JPG or JPEG images are allowed"
-                          );
-                        },
-                        fileSize: (files: FileList) => {
-                          if (!files?.length) return true;
-                          return (
-                            files[0].size <= 2 * 1024 * 1024 ||
-                            "Image must be smaller than 2MB"
-                          );
-                        },
-                      },
-                    }}
-                    onChange={handleImageChange}
-                  />
-
-                  {imagePreview && (
-                    <X
-                      className="cursor-pointer"
-                      onClick={() => {
-                        const fileInput = document.querySelector(
-                          'input[name="image"]',
-                        ) as HTMLInputElement;
-                        if (fileInput) {
-                          fileInput.value = "";
-                        }
-                        setImagePreview(null);
-                      }}
+                  <div className="flex flex-col w-full ">
+                    <Label className="block text-sm font-medium">
+                      Profile Image (optional)
+                    </Label>
+                    <Input
+                      type="file"
+                      name="image"
+                      accept=".png,.jpg,.jpeg"
+                      onChange={handleImageChange}
+                      className="border border-gray-300  p-2"
                     />
+                  </div>
+                  {imagePreview && (
+                    <X className="cursor-pointer" onClick={handleRemoveImage} />
                   )}
                 </div>
               </div>
@@ -295,13 +275,4 @@ export default function SignUp() {
       </CardFooter>
     </Card>
   );
-}
-
-async function convertImageToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
 }

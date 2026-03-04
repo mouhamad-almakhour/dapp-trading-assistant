@@ -6,7 +6,6 @@ import { PasswordForm } from "./password-form";
 import { ProfileDetailsForm } from "./profile-details-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Camera } from "lucide-react";
 
 export default function Settings() {
   const { data: session } = useSession();
@@ -20,16 +19,13 @@ export default function Settings() {
 
       {/* Avatar + name row — overlaps the banner */}
       <div className="px-6 -mt-10 mb-8 flex flex-col sm:flex-row sm:items-end gap-4">
-        <div className="relative w-fit">
-          <Avatar className="h-24 w-24 border-4 border-background shadow-lg user-dropdown-avatar-large">
+        <div className="relative w-fit rounded-full border-4 border-background shadow-lg">
+          <Avatar className="h-24 w-24">
             <AvatarImage src={user.image || "https://github.com/shadcn.png"} />
             <AvatarFallback className="user-dropdown-avatar-fallback text-2xl font-semibold">
               {user.name}
             </AvatarFallback>
           </Avatar>
-          <button className="absolute bottom-0 right-0 rounded-full bg-primary p-1.5 shadow-md text-primary-foreground hover:bg-primary/90 transition-colors">
-            <Camera className="h-3.5 w-3.5" />
-          </button>
         </div>
 
         <div className="flex flex-col gap-1 pb-1">
