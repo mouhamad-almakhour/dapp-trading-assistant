@@ -14,7 +14,8 @@ import { Button } from "./ui/button";
 import NavItems from "./Navitems";
 import { Wallet, LogOut, Copy, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
-import { signOut, useSession } from "@/lib/better-auth/auth-client";
+import { useSession } from "@/lib/better-auth/auth-client";
+import { signOut } from "@/lib/actions/auth.actions";
 
 const UserDropdown = () => {
   const { data: session } = useSession();

@@ -53,7 +53,7 @@ declare global {
     email: string;
     password: string;
     passwordConfirmation: string;
-    image?: FileList;
+    image?: string | undefined;
   };
   type ForgetPasswordFormValues = {
     email: string;
@@ -81,7 +81,7 @@ declare global {
     lastName: string;
     email: string;
     password: string;
-    image?: string; // base64 string
+    image?: string | undefined; // base64 string
   };
 
   type SignInServerData = {
@@ -97,6 +97,11 @@ declare global {
   type ResetPasswordServerData = {
     token?: string;
     password: string;
+  };
+
+  type ChangePasswordServerData = {
+    currentPassword: string;
+    newPassword: string;
   };
 
   // Stock/Crypto asset interface and test data
