@@ -129,21 +129,24 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
         >
           <Link
             href="/"
-            className={cn(
-              "flex items-center gap-2 text-xl font-bold text-sidebar-foreground",
-              isCollapsed && "lg:flex-col lg:gap-0",
-            )}
+            className="flex items-center gap-2 group"
             onClick={closeMobileSidebar}
           >
-            <Image
-              src="/icons/logo.svg"
-              alt="Dapp Trading Assistant"
-              width={24}
-              height={24}
-              priority
-            />
-            {!isCollapsed && <span className="lg:block">Dapp Assistant</span>}
-            {isCollapsed && <span className="hidden">DA</span>}
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neon/10 border border-neon/30 group-hover:bg-neon/20 transition-colors overflow-hidden flex-shrink-0">
+              <Image
+                src="/icons/logo.svg"
+                alt="MA Solution"
+                width={32}
+                height={32}
+                priority
+                className="w-full h-full object-contain"
+              />
+            </div>
+            {!isCollapsed && (
+              <span className="font-bold text-lg tracking-tight text-foreground">
+                <span className="text-neon">MA </span>Solution
+              </span>
+            )}
           </Link>
         </div>
 
@@ -171,7 +174,7 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
         {!isCollapsed && (
           <div className="p-4 border-t border-border">
             <div className="text-xs text-sidebar-foreground/50 text-center">
-              © 2026 DApp Assistant
+              © 2026 MA Solution
             </div>
           </div>
         )}

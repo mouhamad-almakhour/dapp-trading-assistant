@@ -58,7 +58,7 @@ const UserDropdown = () => {
     // if (isConnected && address) disconnect.mutate();
     await signOut();
     router.refresh();
-    router.push("/sign-in");
+    router.push("/");
   };
 
   // if (isConnected && address)
@@ -127,7 +127,7 @@ const UserDropdown = () => {
           {/* Mobile nav */}
           <DropdownMenuSeparator className="user-dropdown-separator sm:hidden" />
           <nav className="sm:hidden">
-            <NavItems variant="dashboard" />
+            <NavItems />
           </nav>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -171,7 +171,7 @@ const UserDropdown = () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator className="user-dropdown-separator sm:hidden" />
         <nav className="sm:hidden">
-          <NavItems variant="dashboard" />
+          <NavItems />
         </nav>
       </DropdownMenuContent>
     </DropdownMenu>

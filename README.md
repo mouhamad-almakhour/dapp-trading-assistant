@@ -1,4 +1,4 @@
-# Dapp Trading Assistant
+# MA Solution
 
 A full-stack crypto dashboard built with **Next.js 16** and **TS**. The app combines Ethereum gas tracking, swap quote simulation, live market intelligence, and user-specific alert/activity management behind authenticated routes.
 
@@ -17,7 +17,7 @@ A full-stack crypto dashboard built with **Next.js 16** and **TS**. The app comb
 
 ## Overview
 
-Dapp Trading Assistant is designed as a single place for crypto users to:
+MA Solution is designed as a single place for crypto users to:
 
 - Monitor Ethereum gas prices,
 - Simulate token swap output using Uniswap V2-style routing,
@@ -182,3 +182,9 @@ npm run start
 
 - No emails received
 - Verify `RESEND_API_KEY`, sender domain setup, and provider limits.
+
+## License
+
+Copyright © 2026 Mouhamad Almakhour. All rights reserved.
+
+Licensed under the [Apache License 2.0](./LICENSE).

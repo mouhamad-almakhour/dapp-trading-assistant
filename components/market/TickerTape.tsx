@@ -13,6 +13,7 @@ const TickerTape = ({
   symbols,
   className,
   theme = "dark",
+  itemSize = "compact",
 }: TickerTapeProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -27,6 +28,7 @@ const TickerTape = ({
     const ticker = document.createElement("tv-ticker-tape");
     ticker.setAttribute("symbols", symbols.join(","));
     ticker.setAttribute("theme", theme);
+    ticker.setAttribute("item-size", itemSize);
     containerRef.current.appendChild(ticker);
 
     // Load the TradingView script if not already loaded globally
@@ -56,7 +58,7 @@ const TickerTape = ({
         containerRef.current.innerHTML = "";
       }
     };
-  }, [symbols, theme]);
+  }, [symbols, theme, itemSize]);
 
   return (
     <div

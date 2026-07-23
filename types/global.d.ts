@@ -18,6 +18,7 @@ declare global {
     symbols: string[]; // Array of TradingView symbol strings (required)
     className?: string;
     theme?: "light" | "dark";
+    itemSize?: "compact" | "regular";
   }
 
   interface CoinGeckoErrorBody {

@@ -10,11 +10,33 @@ import UserDropdown from "@/components/UserDropdown";
 import { getRouteType, ROUTES } from "@/lib/config/routes";
 import { cn } from "@/lib/utils";
 
+const Logo = memo(() => (
+  <Link
+    href={ROUTES.LANDING}
+    className="flex items-center gap-2 group"
+    aria-label="MA Solution home"
+  >
+    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neon/10 border border-neon/30 group-hover:bg-neon/20 transition-colors overflow-hidden">
+      <Image
+        src="/icons/logo.svg"
+        alt="MA Solution"
+        width={32}
+        height={32}
+        priority
+        className="w-full h-full object-contain"
+      />
+    </div>
+    <span className="font-bold text-lg tracking-tight text-foreground">
+      <span className="text-neon">MA </span>Solution
+    </span>
+  </Link>
+));
+Logo.displayName = "Logo";
+
 const Header = () => {
   const pathname = usePathname();
   const routeType = getRouteType(pathname);
   const isDashboard = routeType === "dashboard";
-
   return (
     <header
       className={cn(
@@ -23,30 +45,11 @@ const Header = () => {
       )}
     >
       <div className="container h-16 header-wrapper">
-        {/* Logo - hidden on dashboard */}
-        {!isDashboard && (
-          <Link
-            href={ROUTES.LANDING}
-            className="transition-opacity hover:opacity-80"
-            aria-label="Go to home"
-          >
-            <Image
-              src="/icons/logo.svg"
-              alt="Dapp Trading Assistant"
-              width={140}
-              height={32}
-              className="h-8 w-auto"
-              priority
-            />
-          </Link>
-        )}
+        {!isDashboard && <Logo />}
 
-        {/* Dashboard: empty left side (sidebar has logo) */}
         {isDashboard && <div className="flex-1 lg:ml-0 ml-12" />}
 
-        {/* Navigation based on route type */}
         <nav className="flex items-center gap-4">
-          {routeType === "public" && <PublicNav />}
           {routeType === "auth" && <AuthNav />}
           {routeType === "dashboard" && <DashboardNav />}
         </nav>
@@ -54,23 +57,13 @@ const Header = () => {
     </header>
   );
 };
-
-// Memoized navigation components
-const PublicNav = memo(() => (
-  <>
-    <NavItems variant="landing" />
-    <ModeToggle />
-  </>
-));
-PublicNav.displayName = "PublicNav";
-
 const AuthNav = memo(() => <ModeToggle />);
 AuthNav.displayName = "AuthNav";
 
 const DashboardNav = memo(() => (
   <>
     <div className="hidden sm:block">
-      <NavItems variant="dashboard" />
+      <NavItems />
     </div>
     <ModeToggle />
     <UserDropdown />

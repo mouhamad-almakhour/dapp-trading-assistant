@@ -36,7 +36,7 @@ export const sendWelcomeEmail = async ({
     await resend.emails.send({
       from: "onboarding@resend.dev",
       to: email,
-      subject: "Welcome to Dapp Trading Assistant!",
+      subject: "Welcome to MA Solution!",
       html: htmlTemplate,
     });
     return { success: true };
