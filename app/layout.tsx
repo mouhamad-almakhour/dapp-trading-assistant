@@ -16,8 +16,9 @@ const martianMono = Martian_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dapp Trading Assistant",
-  description: "Real-time gas prices, token swaps, and market insights",
+  title: "MA Solution",
+  description:
+    "Monitor Ethereum gas prices, simulate Uniswap swaps, track live markets with CoinGecko & TradingView, and receive AI-powered alerts — all in one authenticated dashboard.",
 };
 
 export default function RootLayout({

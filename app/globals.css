@@ -5,6 +5,7 @@
 
 @theme inline {
   --font-sans: var(--font-inter);
+  --font-mono: var(--font-inter);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -40,6 +41,12 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Crypto neon tokens */
+  --color-neon: var(--neon);
+  --color-neon-dim: var(--neon-dim);
+  --color-neon-green: var(--neon-green);
+  --color-panel: var(--panel);
 }
 
 :root {
@@ -75,6 +82,12 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Neon tokens (light fallbacks) */
+  --neon: oklch(0.55 0.18 198);
+  --neon-dim: oklch(0.55 0.18 198 / 15%);
+  --neon-green: oklch(0.55 0.2 150);
+  --panel: oklch(1 0 0 / 80%);
 }
 
 .dark {
@@ -109,9 +122,13 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Neon tokens (dark) */
+  --neon: oklch(0.78 0.18 198);
+  --neon-dim: oklch(0.78 0.18 198 / 15%);
+  --neon-green: oklch(0.74 0.2 150);
+  --panel: oklch(0.12 0.01 240 / 70%);
 }
-
-
 
 /* =====================
    Theme bridge
@@ -145,7 +162,6 @@
 }
 
 @layer utilities {
-  
 }
 
 /* =====================
@@ -153,8 +169,6 @@
 ===================== */
 
 @layer components {
-
-
   .container {
     @apply mx-auto max-w-screen-2xl px-4 md:px-6 lg:px-8;
   }
@@ -162,8 +176,8 @@
     @apply w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl px-4;
   }
 
-   .header {
-    @apply  sticky top-0 z-50 w-full h-16 ;
+  .header {
+    @apply sticky top-0 z-50 w-full h-16;
   }
   .header-wrapper {
     @apply flex justify-between items-center;
@@ -176,7 +190,6 @@
   .home-section {
     @apply grid w-[90%] mx-auto gap-6 md:grid-cols-3 xl:grid-cols-3 mb-6;
   }
-
 
   /* Cards */
   .trading-card {
@@ -201,7 +214,7 @@
     @apply shadow-md;
   }
 
-   /* Wrapper */
+  /* Wrapper */
   .carousel-wrapper {
     @apply w-full max-w-6xl mx-auto px-4 mt-16;
   }
@@ -272,16 +285,15 @@
   .carousel-dot.inactive {
     @apply w-3 h-3 bg-foreground/30 hover:bg-foreground/50;
   }
-  
 
   /* Prices */
   .price-positive {
-    color: var(--green);
+    color: var(--neon-green);
     @apply font-semibold;
   }
 
   .price-negative {
-    color: var(--red);
+    color: var(--destructive);
     @apply font-semibold;
   }
 
@@ -296,12 +308,14 @@
     @apply px-4 py-2 rounded-md font-medium transition-opacity;
   }
 
-   .btn-auth {
-    @apply  text-foreground flex items-center gap-2 hover:scale-110 transition-transform border ;
+  .btn-auth {
+    @apply text-foreground flex items-center gap-2 hover:scale-110 transition-transform border;
   }
+
   .btn-primary:hover {
     @apply opacity-90;
   }
+
   .btn-explore {
     @apply text-foreground mt-8 flex items-center gap-2 hover:scale-110 transition-transform border backdrop-blur-2xl;
   }
@@ -312,12 +326,12 @@
   }
 
   .btn-success {
-    background: var(--green);
+    background: var(--neon-green);
     @apply text-white px-4 py-2 rounded-md font-medium;
   }
 
   .btn-danger {
-    background: var(--red);
+    background: var(--destructive);
     @apply text-white px-4 py-2 rounded-md font-medium;
   }
 
@@ -348,7 +362,7 @@
   .sidebar-link {
     @apply flex items-center gap-3 px-4 py-3 text-sm font-medium;
     @apply text-foreground hover:text-foreground;
-    @apply  transition-colors rounded-md mx-2;
+    @apply transition-colors rounded-md mx-2;
   }
 
   .sidebar-link:hover {
@@ -364,10 +378,6 @@
   /* User Dropdown */
   .user-dropdown-trigger {
     @apply flex items-center gap-3 text-muted-foreground transition-colors;
-  }
-
-  .user-dropdown-trigger:hover {
-    color: var(--yellow);
   }
 
   .user-dropdown-content {
@@ -387,7 +397,7 @@
   }
 
   .user-dropdown-avatar-fallback {
-    background: var(--yellow);
+    background: var(--neon);
     color: var(--background);
     @apply text-sm font-bold;
   }
@@ -428,18 +438,18 @@
   }
 
   .user-dropdown-item-danger {
-    color: var(--red);
+    color: var(--destructive);
     @apply font-medium;
   }
 
   .user-dropdown-item-danger:hover {
     background: transparent;
-    color: var(--red);
+    color: var(--destructive);
   }
 
   .user-dropdown-item-danger:focus {
     background: transparent;
-    color: var(--red);
+    color: var(--destructive);
   }
 
   /* Modal */
@@ -453,7 +463,60 @@
   }
 }
 
-/* TradingView Advanced Chart Widget Styles */
+/* =====================
+   Landing page — Ticker
+===================== */
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track {
+  animation: ticker 28s linear infinite;
+}
+
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+/* =====================
+   Landing page — Glow
+===================== */
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.glow-dot {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* =====================
+   Landing page — Grid BG
+===================== */
+
+.hero-grid {
+  background-image:
+    linear-gradient(oklch(1 0 0 / 3%) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 3%) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* =====================
+   TradingView widget
+===================== */
+
 .tradingview-widget-container {
   position: relative;
   background-color: #0a0909 !important;
@@ -464,11 +527,12 @@
 .tradingview-widget-container__widget {
   background-color: #0a0909 !important;
   height: 100% !important;
-
 }
 
+/* =====================
+   Custom Scrollbar
+===================== */
 
-/* Custom Scrollbar Styles */
 .custom-scrollbar::-webkit-scrollbar {
   width: 7px;
   height: 7px;
@@ -487,25 +551,24 @@
   background: #171a34;
 }
 
-/* Table Custom Scrollbar */
-.custom-scrollbar [data-slot='table-container'] {
+.custom-scrollbar [data-slot="table-container"] {
   overflow-y: auto;
 }
 
-.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar {
+.custom-scrollbar [data-slot="table-container"]::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
 
-.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar-track {
+.custom-scrollbar [data-slot="table-container"]::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar-thumb {
+.custom-scrollbar [data-slot="table-container"]::-webkit-scrollbar-thumb {
   background: #1e2833;
   border-radius: 8px;
 }
 
-.custom-scrollbar [data-slot='table-container']::-webkit-scrollbar-thumb:hover {
+.custom-scrollbar [data-slot="table-container"]::-webkit-scrollbar-thumb:hover {
   background: #171a34;
 }
