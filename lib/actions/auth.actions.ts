@@ -3,6 +3,7 @@
 import { auth } from "@/lib/better-auth/auth";
 import { headers } from "next/headers";
 import { inngest } from "../inngest/client";
+import { getAuthErrorMessage } from "../better-auth/error-messages";
 
 export const signUpWithEmail = async ({
   email,
@@ -12,7 +13,7 @@ export const signUpWithEmail = async ({
   image,
 }: SignUpServerData) => {
   try {
-    const response = await auth.api.signUpEmail({
+    await auth.api.signUpEmail({
       body: {
         name: `${firstName} ${lastName}`,
         email,
@@ -21,7 +22,9 @@ export const signUpWithEmail = async ({
       },
     });
 
-    if (response) {
+    // Account creation has succeeded. An optional welcome workflow failure
+    // must not tell the user to retry registration for an existing account.
+    try {
       await inngest.send({
         name: "app/user.signup",
         data: {
@@ -30,14 +33,16 @@ export const signUpWithEmail = async ({
           url: process.env.NEXT_PUBLIC_APP_URL!,
         },
       });
+    } catch {
+      console.error("[auth] Signup welcome workflow could not be queued.");
     }
 
-    return { success: true, data: response };
+    return { success: true };
   } catch (e) {
-    console.error("Error during sign-up:", e);
+    console.error("[auth] Signup request failed.");
     return {
       success: false,
-      error: e instanceof Error ? e.message : "Unknown error during sign up",
+      error: getAuthErrorMessage(e, "signup"),
     };
   }
 };
@@ -48,17 +53,17 @@ export const signInWithEmail = async ({
   rememberMe,
 }: SignInServerData) => {
   try {
-    const response = await auth.api.signInEmail({
+    await auth.api.signInEmail({
       body: { email, password, rememberMe },
       headers: await headers(),
     });
 
-    return { success: true, data: response };
+    return { success: true };
   } catch (e) {
-    console.log("Sign in failed", e);
+    console.error("[auth] Signin request failed.");
     return {
       success: false,
-      error: e instanceof Error ? e.message : "Unknown error during sign in",
+      error: getAuthErrorMessage(e, "signin"),
     };
   }
 };
@@ -68,10 +73,10 @@ export const signOut = async () => {
     await auth.api.signOut({ headers: await headers() });
     return { success: true };
   } catch (e) {
-    console.error("Sign out failed", e);
+    console.error("[auth] Signout request failed.");
     return {
       success: false,
-      error: e instanceof Error ? e.message : "Sign out failed",
+      error: getAuthErrorMessage(e, "signout"),
     };
   }
 };
@@ -80,18 +85,18 @@ export const forgetPasswordRequest = async ({
   email,
 }: ForgetPasswordServerData) => {
   try {
-    const response = await auth.api.requestPasswordReset({
+    await auth.api.requestPasswordReset({
       body: {
         email, // required
         redirectTo: "/reset-password",
       },
     });
-    return { success: true, data: response };
+    return { success: true };
   } catch (e) {
-    console.error("Error during password reset request:", e);
+    console.error("[auth] Password recovery request failed.");
     return {
       success: false,
-      error: e instanceof Error ? e.message : "Password reset failed",
+      error: getAuthErrorMessage(e, "recovery"),
     };
   }
 };
@@ -101,18 +106,18 @@ export const resetPassword = async ({
   token,
 }: ResetPasswordServerData) => {
   try {
-    const response = await auth.api.resetPassword({
+    await auth.api.resetPassword({
       body: {
         newPassword: password, // required
         token, // required
       },
     });
-    return { success: true, data: response };
+    return { success: true };
   } catch (e) {
-    console.error("Error during password reset:", e);
+    console.error("[auth] Password reset request failed.");
     return {
       success: false,
-      error: e instanceof Error ? e.message : "Password reset failed",
+      error: getAuthErrorMessage(e, "reset"),
     };
   }
 };

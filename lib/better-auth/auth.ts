@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
-import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { mongodbAdapter } from "@better-auth/mongo-adapter";
 import { db } from "@/database/db";
 import { sendEmail } from "../resend/email";
 import {

@@ -56,7 +56,16 @@ const UserDropdown = () => {
 
   const handleSignout = async () => {
     // if (isConnected && address) disconnect.mutate();
-    await signOut();
+    try {
+      const result = await signOut();
+      if (!result.success) {
+        toast.error("Sign out failed", { description: result.error });
+        return;
+      }
+    } catch {
+      toast.error("Sign out failed", { description: "We couldn't sign you out. Please try again." });
+      return;
+    }
     router.refresh();
     router.push("/");
   };

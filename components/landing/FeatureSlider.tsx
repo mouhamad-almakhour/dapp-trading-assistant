@@ -44,7 +44,7 @@ const FeatureSlider = () => {
                       alt={feature.title}
                       fill
                       className="carousel-image"
-                      priority={feature.id === 1}
+                      preload={feature.id === 1}
                     />
                   </div>
 

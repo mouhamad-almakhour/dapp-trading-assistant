@@ -53,12 +53,11 @@ export default function ForgetPassword() {
       }
       setSubmittedEmail(data.email);
       setEmailSent(true);
-      toast.success("Reset link sent!", {
-        description: "Check your email for the password reset link.",
+      toast.success("Reset request received", {
+        description: "If an account uses this email, you will receive a password reset link.",
         position: "top-center",
       });
-    } catch (error) {
-      console.error("Error during forget password request:", error);
+    } catch {
       toast.error("Something went wrong", {
         description: "Please try again",
         position: "top-center",
