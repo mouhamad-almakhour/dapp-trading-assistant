@@ -35,15 +35,15 @@ export default function ResetPassword() {
   const onSubmit = async (data: ResetPasswordServerData) => {
     const token = new URLSearchParams(window.location.search).get("token");
     if (!token) {
-      toast.error("Invalid token", {
-        description: "Please try again",
+      toast.error("Reset link unavailable", {
+        description: "This reset link is invalid. Request a new password reset link.",
         position: "top-center",
       });
       return;
     }
     try {
       const result = await resetPassword({ password: data.password, token });
-      if (result.error) {
+      if (!result.success) {
         toast.error("Password reset failed", {
           description: result.error,
           position: "top-center",
@@ -55,8 +55,7 @@ export default function ResetPassword() {
         description: "You can now login with your new password.",
         position: "top-center",
       });
-    } catch (error) {
-      console.error("Error during reset password request:", error);
+    } catch {
       toast.error("Something went wrong", {
         description: "Please try again",
         position: "top-center",

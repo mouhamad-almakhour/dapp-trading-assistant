@@ -68,10 +68,9 @@ export default function SignUp() {
       });
 
       router.push("/dashboard");
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong", {
-        description:
-          error instanceof Error ? error.message : "Please try again later.",
+        description: "We couldn't complete signup. Please try again shortly.",
         position: "top-center",
       });
     }
@@ -225,8 +224,8 @@ export default function SignUp() {
                     <Image
                       src={imagePreview}
                       alt="Profile preview"
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      className="object-cover"
                     />
                   </div>
                 )}

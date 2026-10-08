@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  logging: {
+    // Server action arguments contain passwords, emails, and profile images.
+    serverFunctions: false,
+  },
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },

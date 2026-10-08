@@ -22,6 +22,7 @@ import InputField from "@/components/forms/inputField";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signInWithEmail } from "@/lib/actions/auth.actions";
+import { getAuthErrorMessage } from "@/lib/better-auth/error-messages";
 
 export default function SignIn() {
   const router = useRouter();
@@ -61,11 +62,9 @@ export default function SignIn() {
         description: "You have successfully signed in.",
       });
       router.push("/dashboard");
-    } catch (e) {
-      console.error("Error during sign-in:", e);
+    } catch {
       toast.error("Sign in failed", {
-        description:
-          e instanceof Error ? e.message : "An error occurred during sign in",
+        description: getAuthErrorMessage(undefined, "signin"),
         position: "top-center",
       });
     }
@@ -83,8 +82,7 @@ export default function SignIn() {
           fetchOptions: {
             onError: (ctx) => {
               toast.error("Sign in failed", {
-                description:
-                  ctx.error.message || "An error occurred during sign in",
+                description: getAuthErrorMessage(ctx.error, "signin"),
                 position: "top-center",
               });
             },
@@ -97,9 +95,9 @@ export default function SignIn() {
         }),
         new Promise((resolve) => setTimeout(resolve, 2000)), // 2 second
       ]);
-    } catch (e) {
+    } catch {
       toast.error("Sign in failed", {
-        description: e instanceof Error ? e.message : "An error occurred",
+        description: getAuthErrorMessage(undefined, "signin"),
         position: "top-center",
       });
     } finally {
